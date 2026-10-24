@@ -14,6 +14,7 @@ Open `index.html` in any browser (it works on phones and computers, with no inst
   - **Orange:** right digit in the wrong spot
   - **Off:** digit is not in the code
 - Your past guesses and their lights stay on the board so you can look back at them.
+- Tap **Cross out**, then a digit, to mark it with a big red X as a reminder that it's not in the code. Do the same on a crossed digit to clear it.
 - You win when every light is green. If your 10th guess misses, the code is revealed.
 
 Each digit in the code can light up only one lamp. For example, if the code is `1123` and you guess `1111`, you get 2 green and 2 off.
