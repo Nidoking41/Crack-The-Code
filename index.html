@@ -99,7 +99,7 @@ h1 span { color: var(--accent); }
 .row .num { font-family: var(--font-digits); font-size: 0.75rem; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
 .digits { display: flex; align-items: center; gap: 5px; min-width: 0; height: 100%; }
 .cell {
-  flex: 1 1 0; max-width: 44px; height: 100%; max-height: 36px; min-height: 0; border-radius: 6px;
+  flex: 1 1 0; line-height: 1; max-width: 44px; height: 100%; max-height: 36px; min-height: 0; border-radius: 6px;
   display: grid; place-items: center;
   font-family: var(--font-digits); font-weight: 600; font-size: 1.15rem;
   background: var(--bg); border: 1px solid var(--line); color: var(--fg);
@@ -108,15 +108,14 @@ h1 span { color: var(--accent); }
 .row.active .cell { background: var(--panel); }
 .row.active .cell.cursor { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
 
-.lights { display: grid; grid-template-columns: repeat(2, 11px); gap: 4px; }
-.lights.wide { grid-template-columns: repeat(3, 11px); }
-.lamp { width: 11px; height: 11px; border-radius: 50%; background: var(--lamp-off); }
+.lights { display: flex; gap: 4px; }
+.lamp { width: 10px; height: 10px; flex: 0 0 auto; border-radius: 50%; background: var(--lamp-off); }
 .lamp.g { background: var(--lamp-green); box-shadow: 0 0 6px color-mix(in srgb, var(--lamp-green) 70%, transparent); }
 .lamp.o { background: var(--lamp-orange); box-shadow: 0 0 6px color-mix(in srgb, var(--lamp-orange) 70%, transparent); }
 .row.empty .lamp, .row.active .lamp { opacity: .35; }
 
-.status { min-height: 1.3em; display: grid; place-items: center; }
-.message { text-align: center; font-size: 0.85rem; color: var(--muted); }
+.status { min-height: 1.3em; display: grid; align-items: center; }
+.message { text-align: left; font-size: 0.85rem; color: var(--muted); }
 .message:empty { display: none; }
 .message.err { color: var(--danger); }
 
@@ -132,11 +131,12 @@ h1 span { color: var(--accent); }
   padding: 12px 22px; cursor: pointer;
 }
 
-.keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-.keypad .wide2 { grid-column: span 2; }
+.keypad { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 44px; gap: 6px; }
+.status-row { display: flex; align-items: center; gap: 8px; }
+.status-row .status { flex: 1 1 auto; min-width: 0; }
 .key {
   font-family: var(--font-digits); font-weight: 600; font-size: 1.3rem;
-  height: 46px; border-radius: 10px; border: 1px solid var(--line);
+  border-radius: 10px; border: 1px solid var(--line);
   background: var(--panel); color: var(--fg); cursor: pointer;
   box-shadow: 0 2px 0 var(--line);
 }
@@ -155,9 +155,9 @@ h1 span { color: var(--accent); }
 .tools { display: flex; align-items: center; gap: 10px; }
 .mark-btn {
   font: 700 0.85rem var(--font-body); text-transform: uppercase; letter-spacing: .06em;
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; flex: 0 0 auto;
   background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 10px;
-  padding: 9px 14px; cursor: pointer; white-space: nowrap;
+  padding: 7px 10px; cursor: pointer; font-size: 0.75rem;
 }
 .mark-btn .x { color: var(--x-red); font-size: 1.2rem; line-height: 1; }
 .mark-btn[aria-pressed="true"] { background: var(--x-red); color: #fff; border-color: var(--x-red); }
@@ -166,7 +166,7 @@ h1 span { color: var(--accent); }
 
 button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-.legend { display: flex; flex-wrap: nowrap; justify-content: center; gap: 12px; font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; justify-content: flex-start; column-gap: 10px; row-gap: 2px; font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend .lamp { width: 10px; height: 10px; }
 
@@ -205,7 +205,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   body { padding-top: 8px; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
   .app { gap: 6px; }
   h1 { font-size: 1.15rem; }
-  .key { height: 40px; }
+  .keypad { grid-auto-rows: 34px; gap: 5px; }
+  .key { font-size: 1.15rem; }
+  .cell { font-size: 0.95rem; line-height: 1; }
   .board { padding: 4px; gap: 2px; }
   .row { padding: 1px 6px; }
   .lights, .lights.wide { display: flex; gap: 3px; }
@@ -239,6 +241,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   <div class="board" id="board" aria-live="polite"></div>
 
+  <div class="status-row">
   <div class="status">
   <div class="legend" id="legend">
     <span><i class="lamp g"></i>Right spot</span>
@@ -247,6 +250,8 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   </div>
 
   <div class="message" id="message"></div>
+  </div>
+  <button class="mark-btn" type="button" id="mark" aria-pressed="false"><span class="x" aria-hidden="true">✕</span>Cross out</button>
   </div>
 
   <div class="result" id="result" hidden>
@@ -266,10 +271,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <button class="key" type="button" data-d="7">7</button>
     <button class="key" type="button" data-d="8">8</button>
     <button class="key" type="button" data-d="9">9</button>
-    <button class="key" type="button" data-d="0">0</button>
-    <button class="key mark-btn wide2" type="button" id="mark" aria-pressed="false"><span class="x" aria-hidden="true">✕</span>Cross out</button>
     <button class="key del" type="button" id="del" aria-label="Delete">⌫</button>
-    <button class="key enter wide2" type="button" id="enter">Enter</button>
+    <button class="key" type="button" data-d="0">0</button>
+    <button class="key enter" type="button" id="enter">Enter</button>
   </div>
 </div>
 
@@ -527,6 +531,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     $("del").disabled = state.over;
     $("enter").disabled = state.over;
     $("keypad").hidden = state.over;
+    $("mark").hidden = state.over;
 
     const res = $("result");
     res.hidden = !state.over;
