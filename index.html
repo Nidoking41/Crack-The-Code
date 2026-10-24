@@ -418,6 +418,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   function toggleCross(d) {
     const i = state.crossed.indexOf(d);
     if (i >= 0) state.crossed.splice(i, 1); else state.crossed.push(d);
+    state.marking = false;
     render();
   }
   function toggleMarking() {
@@ -508,7 +509,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     });
     $("keypad").classList.toggle("marking", !!state.marking);
     $("mark").setAttribute("aria-pressed", String(!!state.marking));
-    $("mark-hint").textContent = state.marking ? "Tap a digit to cross it out or undo. Tap Cross out again when done." : "";
+    $("mark-hint").textContent = state.marking ? "Tap a digit to cross it out, or tap a crossed digit to clear it." : "";
     $("tools").hidden = state.over;
     $("del").disabled = state.over;
     $("enter").disabled = state.over;
