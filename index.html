@@ -47,6 +47,25 @@ body{margin:0}
   color-scheme: dark;
 }
 
+/* Color schemes picked in Settings; no data-scheme = follow the device's light/dark mode */
+html:root[data-scheme="steel"] { --bg: #e3e8ed; --panel: #f6f8fa; --well: #d5dce3; --fg: #14202b; --muted: #5a6977; --line: #c3ccd5; --accent: #a8641a; --accent-fg: #ffffff; --lamp-green: #179a45; --lamp-orange: #e8850c; --lamp-off: #b3bdc7; --danger: #b4322a; --x-red: #e02424; color-scheme: light; }
+html:root[data-scheme="night"] { --bg: #0e141a; --panel: #172029; --well: #0a0f14; --fg: #e4ebf2; --muted: #8c9bab; --line: #2a3643; --accent: #e3a548; --accent-fg: #1a1206; --lamp-green: #38d873; --lamp-orange: #ffa733; --lamp-off: #2b3743; --danger: #ff6b5e; --x-red: #ff4040; color-scheme: dark; }
+html:root[data-scheme="ocean"] { --bg: #0b2233; --panel: #12324a; --well: #08192a; --fg: #e3f2fb; --muted: #8fb3c9; --line: #1f4a66; --accent: #2ec4d6; --accent-fg: #04202a; --lamp-green: #3ee08a; --lamp-orange: #ffb340; --lamp-off: #24465e; --danger: #ff7a6b; --x-red: #ff4d4d; color-scheme: dark; }
+html:root[data-scheme="forest"] { --bg: #13201a; --panel: #1b2d24; --well: #0e1813; --fg: #e6f0e8; --muted: #9bb5a3; --line: #2a4234; --accent: #d9b44a; --accent-fg: #1c1505; --lamp-green: #5be38a; --lamp-orange: #ffa040; --lamp-off: #2c4236; --danger: #ff7a6b; --x-red: #ff4d4d; color-scheme: dark; }
+html:root[data-scheme="sunset"] { --bg: #fbe9dc; --panel: #fff6ef; --well: #f1d8c6; --fg: #3a1f17; --muted: #8a5f4f; --line: #e7c4ae; --accent: #d4483b; --accent-fg: #ffffff; --lamp-green: #1e9e52; --lamp-orange: #f08a00; --lamp-off: #d9bba8; --danger: #b4322a; --x-red: #d42020; color-scheme: light; }
+html:root[data-scheme="neon"] { --bg: #0d0a1f; --panel: #17123a; --well: #0a0717; --fg: #f2ecff; --muted: #a596d6; --line: #2e2566; --accent: #ff3ea5; --accent-fg: #ffffff; --lamp-green: #39ff88; --lamp-orange: #ffb800; --lamp-off: #2a2350; --danger: #ff6b8a; --x-red: #ff3355; color-scheme: dark; }
+html:root[data-scheme="paper"] { --bg: #f4f4f0; --panel: #ffffff; --well: #e6e6e0; --fg: #111111; --muted: #666660; --line: #d0d0c8; --accent: #111111; --accent-fg: #ffffff; --lamp-green: #18a050; --lamp-orange: #e88a00; --lamp-off: #cfcfc8; --danger: #b4322a; --x-red: #e02424; color-scheme: light; }
+.swatches { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.swatch {
+  display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 10px;
+  border: 2px solid var(--line); background: var(--bg); color: var(--fg); cursor: pointer;
+  font: 600 0.85rem var(--font-body); text-align: left;
+}
+.swatch[aria-pressed="true"] { border-color: var(--accent); }
+.swatch .chip { width: 34px; height: 34px; border-radius: 8px; flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 5px; box-sizing: border-box; border: 1px solid rgba(128,128,128,.35); }
+.swatch .chip i { border-radius: 50%; }
+.head-btns { display: flex; gap: 6px; }
+
 html { height: 100%; box-sizing: border-box; }
 body { height: 100%; box-sizing: border-box; overflow: hidden; }
 body {
@@ -223,7 +242,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 <div class="app">
   <header>
     <h1>Crack the <span>Code</span></h1>
-    <button class="icon-btn" id="stats-btn" type="button">Stats</button>
+    <div class="head-btns">
+      <button class="icon-btn" id="stats-btn" type="button">Stats</button>
+      <button class="icon-btn" id="settings-btn" type="button">Settings</button>
+    </div>
   </header>
 
   <div class="controls">
@@ -274,6 +296,15 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <button class="key del" type="button" id="del" aria-label="Delete">⌫</button>
     <button class="key" type="button" data-d="0">0</button>
     <button class="key enter" type="button" id="enter">Enter</button>
+  </div>
+</div>
+
+<div class="overlay" id="settings" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="sheet-head"><h2 id="settings-title">Settings</h2><span class="sub">Color scheme</span></div>
+    <div class="swatches" id="swatches"></div>
+    <p class="note">Auto matches your device's light or dark mode. Your choice is saved on this device.</p>
+    <button class="primary" type="button" id="settings-close">Done</button>
   </div>
 </div>
 
@@ -594,7 +625,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     else if (k.id === "enter") submit();
   });
   document.addEventListener("keydown", (e) => {
-    if (!$("stats").hidden) { if (e.key === "Escape") $("stats").hidden = true; return; }
+    if (!$("stats").hidden || !$("settings").hidden) { if (e.key === "Escape") { $("stats").hidden = true; $("settings").hidden = true; } return; }
     if (/^[0-9]$/.test(e.key)) typeDigit(Number(e.key));
     else if (e.key === "Backspace") deleteDigit();
     else if (e.key === "Enter") { e.preventDefault(); state.over ? newGame(state.mode, state.len) : submit(); }
@@ -607,6 +638,41 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   $("stats-btn").addEventListener("click", () => { renderStats(); $("stats").hidden = false; $("stats-close").focus(); });
   $("stats-close").addEventListener("click", () => { $("stats").hidden = true; });
   $("stats").addEventListener("click", (e) => { if (e.target.id === "stats") $("stats").hidden = true; });
+
+  // ---------- color schemes ----------
+  const SCHEMES = [
+    { id: "auto", label: "Auto", chip: ["#e3e8ed", "#0e141a", "#a8641a", "#e3a548"] },
+    { id: "steel", label: "Steel", chip: ["#e3e8ed", "#a8641a", "#179a45", "#e8850c"] },
+    { id: "night", label: "Night", chip: ["#0e141a", "#e3a548", "#38d873", "#ffa733"] },
+    { id: "ocean", label: "Ocean", chip: ["#0b2233", "#2ec4d6", "#3ee08a", "#ffb340"] },
+    { id: "forest", label: "Forest", chip: ["#13201a", "#d9b44a", "#5be38a", "#ffa040"] },
+    { id: "sunset", label: "Sunset", chip: ["#fbe9dc", "#d4483b", "#1e9e52", "#f08a00"] },
+    { id: "neon", label: "Neon", chip: ["#0d0a1f", "#ff3ea5", "#39ff88", "#ffb800"] },
+    { id: "paper", label: "Paper", chip: ["#f4f4f0", "#111111", "#18a050", "#e88a00"] },
+  ];
+  function applyScheme(id) {
+    if (id && id !== "auto") document.documentElement.dataset.scheme = id;
+    else delete document.documentElement.dataset.scheme;
+  }
+  function renderSwatches() {
+    const current = load("ctc-scheme", "auto");
+    $("swatches").innerHTML = SCHEMES.map((sc) =>
+      '<button type="button" class="swatch" data-scheme-id="' + sc.id + '" aria-pressed="' + (sc.id === current) + '"' +
+      (sc.id === "auto" ? "" : ' style="background:' + sc.chip[0] + ';color:' + (["steel", "sunset", "paper"].includes(sc.id) ? "#14202b" : "#f2f4f7") + '"') + '>' +
+      '<span class="chip" style="background:' + sc.chip[0] + '">' + sc.chip.map((c) => '<i style="background:' + c + '"></i>').join("") + "</span>" +
+      sc.label + "</button>").join("");
+  }
+  applyScheme(load("ctc-scheme", "auto"));
+  $("swatches").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-scheme-id]");
+    if (!b) return;
+    save("ctc-scheme", b.dataset.schemeId);
+    applyScheme(b.dataset.schemeId);
+    renderSwatches();
+  });
+  $("settings-btn").addEventListener("click", () => { renderSwatches(); $("settings").hidden = false; $("settings-close").focus(); });
+  $("settings-close").addEventListener("click", () => { $("settings").hidden = true; });
+  $("settings").addEventListener("click", (e) => { if (e.target.id === "settings") $("settings").hidden = true; });
 
   // Keep an in-progress game when the page updates.
   function start(data) {

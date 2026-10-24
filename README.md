@@ -38,6 +38,10 @@ A timer starts when you tap your first digit and stops when the game ends. The *
 
 Stats are saved in your browser on your device.
 
+## Settings
+
+The **Settings** button lets you pick a color scheme: Auto (matches your device's light or dark mode), Steel, Night, Ocean, Forest, Sunset, Neon or Paper. Your choice is saved on your device.
+
 ## Playing it online
 
 To get a link you can open on your phone, turn on GitHub Pages: in this repository go to **Settings → Pages**, set the source to **Deploy from a branch**, choose `main` and `/ (root)`, and save. After a minute or so, the game appears at `https://nidoking41.github.io/Crack-The-Code/`.
