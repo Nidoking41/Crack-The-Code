@@ -54,7 +54,8 @@ body {
   font-size: 15px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 12px 20px;
+  padding-top: 16px;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
   -webkit-tap-highlight-color: transparent;
 }
 .app { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
