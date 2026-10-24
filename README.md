@@ -9,7 +9,7 @@ Open `index.html` in any browser (it works on phones and computers, with no inst
 - The computer picks a random secret code. Digits are 0 to 9, and a code can start with 0.
 - You have **10 guesses** to crack it.
 - Tap digits on the on-screen keypad. A highlight shows which space you're filling, and **Delete** removes the last digit. Tap **Enter** to submit.
-- Every guess gets one light per digit, shuffled into a random order:
+- Every guess gets one light per digit. Lights fill in from the top left, greens first, then oranges, then off, so a light's position never tells you which digit it belongs to:
   - **Green:** right digit in the right spot
   - **Orange:** right digit in the wrong spot
   - **Off:** digit is not in the code

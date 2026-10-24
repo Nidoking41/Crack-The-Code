@@ -328,11 +328,11 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       <li><i class="lamp o"></i><span><b>Orange:</b> a right digit in the wrong spot</span></li>
       <li><i class="lamp"></i><span><b>Off:</b> a digit that isn't in the code</span></li>
     </ul>
-    <p>The lights are shuffled. They tell you <b>how many</b> digits are right, not <b>which</b> ones.</p>
+    <p>Lights fill in from the top left: greens first, then oranges. They tell you <b>how many</b> digits are right, not <b>which</b> ones.</p>
     <div class="example">
       <div class="ex-row"><span class="ex-label">Code</span><span class="ex-code">1234</span></div>
-      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">1243</span><span class="lights"><i class="lamp o"></i><i class="lamp g"></i><i class="lamp o"></i><i class="lamp g"></i></span><span class="ex-note">1 and 2 are in place, while 4 and 3 are swapped</span></div>
-      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">5617</span><span class="lights"><i class="lamp "></i><i class="lamp o"></i><i class="lamp "></i><i class="lamp "></i></span><span class="ex-note">Only the 1 is in the code, in a different spot</span></div>
+      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">1243</span><span class="lights"><i class="lamp g"></i><i class="lamp g"></i><i class="lamp o"></i><i class="lamp o"></i></span><span class="ex-note">1 and 2 are in place, while 4 and 3 are swapped</span></div>
+      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">5617</span><span class="lights"><i class="lamp o"></i><i class="lamp "></i><i class="lamp "></i><i class="lamp "></i></span><span class="ex-note">Only the 1 is in the code, in a different spot</span></div>
     </div>
     <h3>Cross out</h3>
     <p>Tap <b>✕ Cross out</b>, then a digit, to put a red X on it as a reminder. Do the same again to clear it.</p>
@@ -418,15 +418,13 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     return { green, orange, off: code.length - green - orange };
   }
 
-  function shuffledLights(s) {
+  // Lights fill in reading order: greens first, then oranges, then off.
+  // Their position never matches a digit's position.
+  function orderedLights(s) {
     const lamps = [];
     for (let i = 0; i < s.green; i++) lamps.push("g");
     for (let i = 0; i < s.orange; i++) lamps.push("o");
     for (let i = 0; i < s.off; i++) lamps.push("");
-    for (let i = lamps.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [lamps[i], lamps[j]] = [lamps[j], lamps[i]];
-    }
     return lamps;
   }
 
@@ -537,7 +535,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     }
     const guess = state.current.slice();
     const s = score(state.code, guess);
-    state.guesses.push({ digits: guess, lights: shuffledLights(s), score: s });
+    state.guesses.push({ digits: guess, lights: orderedLights(s), score: s });
     state.current = [];
     if (s.green === state.len || state.guesses.length >= MAX_TURNS) state.endedAt = Date.now();
     if (s.green === state.len) {
@@ -728,7 +726,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   // Keep an in-progress game when the page updates.
   function start(data) {
-    if (data && data.state && data.state.code) { state = data.state; render(); }
+    if (data && data.state && data.state.code) { state = data.state; state.guesses.forEach((g) => { g.lights = orderedLights(g.score); }); render(); }
     else newGame();
   }
   window.claude?.hot?.snapshot?.(() => ({ state }));
