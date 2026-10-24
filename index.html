@@ -318,8 +318,8 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 <div class="overlay" id="help" hidden>
   <div class="sheet help" role="dialog" aria-modal="true" aria-labelledby="help-title">
-    <div class="sheet-head"><h2 id="help-title">How to play</h2><span class="sub">10 guesses</span></div>
-    <p>Crack the secret code in 10 guesses or fewer. Each digit is 0 to 9, and a code can start with 0.</p>
+    <div class="sheet-head"><h2 id="help-title">How to play</h2><span class="sub">Ten guesses</span></div>
+    <p>Crack the secret code in ten guesses or fewer. Each digit can be &ldquo;0&rdquo; to &ldquo;9&rdquo;, and a code can start with &ldquo;0&rdquo;.</p>
     <h3>Make a guess</h3>
     <p>Tap digits on the keypad to fill each space, then tap <b>Enter</b>. <b>⌫</b> deletes the last digit.</p>
     <h3>Read the lights</h3>
@@ -331,15 +331,15 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <p>Lights fill in from the top left: greens first, then oranges. They tell you <b>how many</b> digits are right, not <b>which</b> ones.</p>
     <div class="example">
       <div class="ex-row"><span class="ex-label">Code</span><span class="ex-code">1234</span></div>
-      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">5243</span><span class="lights"><i class="lamp g"></i><i class="lamp o"></i><i class="lamp o"></i><i class="lamp "></i></span><span class="ex-note">1 green for the 2 in its right spot, 2 orange for the 4 and 3 in wrong spots, 1 off for the 5</span></div>
-      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">5617</span><span class="lights"><i class="lamp o"></i><i class="lamp "></i><i class="lamp "></i><i class="lamp "></i></span><span class="ex-note">1 orange: the 1 is in the code but in a different spot</span></div>
+      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">5243</span><span class="lights"><i class="lamp g"></i><i class="lamp o"></i><i class="lamp o"></i><i class="lamp "></i></span><span class="ex-note">One green for the &ldquo;2&rdquo; in its right spot, two orange for the &ldquo;4&rdquo; and &ldquo;3&rdquo; in the wrong spots, and one light is off for the &ldquo;5&rdquo;</span></div>
+      <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">5617</span><span class="lights"><i class="lamp o"></i><i class="lamp "></i><i class="lamp "></i><i class="lamp "></i></span><span class="ex-note">One orange for the &ldquo;1&rdquo;, which is in the code but in a different spot. The other three lights are off.</span></div>
     </div>
     <h3>Cross out</h3>
     <p>Tap <b>✕ Cross out</b>, then a digit, to put a red X on it as a reminder. Do the same again to clear it.</p>
     <h3>Modes</h3>
-    <p><b>Easy:</b> 4 digits with no repeats. <b>Hard:</b> 4, 5 or 6 digits, and digits can repeat. Each digit in the code lights up only one light, so if the code is 1123 and you guess 1111, you get 2 green and 2 off.</p>
+    <p><b>Easy:</b> four digits with no repeats. <b>Hard:</b> four, five or six digits, and digits can repeat. Each digit in the code lights up only one light, so if the code is &ldquo;1123&rdquo; and you guess &ldquo;1111&rdquo;, you get two green and two off.</p>
     <h3>Winning</h3>
-    <p>All green cracks the code. If you're out of guesses, the code is revealed. The timer starts on your first tap, and <b>Stats</b> tracks your streaks, wins and best times.</p>
+    <p>All green cracks the code. If you run out of guesses, the code is revealed. The timer starts on your first tap, and <b>Stats</b> tracks your streaks, wins and best times.</p>
     <button class="primary" type="button" id="help-close">Got it</button>
   </div>
 </div>
@@ -722,7 +722,6 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   $("help-btn").addEventListener("click", openHelp);
   $("help-close").addEventListener("click", () => { $("help").hidden = true; save("ctc-seen-help", true); });
   $("help").addEventListener("click", (e) => { if (e.target.id === "help") { $("help").hidden = true; save("ctc-seen-help", true); } });
-  if (!load("ctc-seen-help", false)) openHelp();
 
   // Keep an in-progress game when the page updates.
   function start(data) {
