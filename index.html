@@ -46,7 +46,8 @@ body{margin:0}
   color-scheme: dark;
 }
 
-html, body { height: 100%; }
+html { height: 100%; box-sizing: border-box; }
+body { height: 100%; box-sizing: border-box; overflow: hidden; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -58,7 +59,9 @@ body {
   padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
   -webkit-tap-highlight-color: transparent;
 }
-.app { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.app { max-width: 440px; height: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.app > * { flex-shrink: 0; }
+.app > .board { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 
 header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 h1 {
@@ -129,7 +132,7 @@ h1 span { color: var(--accent); }
 .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .key {
   font-family: var(--font-digits); font-weight: 600; font-size: 1.4rem;
-  height: 52px; border-radius: 10px; border: 1px solid var(--line);
+  height: 50px; border-radius: 10px; border: 1px solid var(--line);
   background: var(--panel); color: var(--fg); cursor: pointer;
   box-shadow: 0 2px 0 var(--line);
 }
