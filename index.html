@@ -113,7 +113,7 @@ h1 span { color: var(--accent); }
 .seg { display: inline-flex; background: var(--well); border-radius: 10px; padding: 3px; gap: 3px; }
 .seg button {
   font: 600 0.85rem var(--font-body); border: 0; background: transparent; color: var(--muted);
-  padding: 5px 12px; border-radius: 8px; cursor: pointer;
+  padding: 5px 10px; border-radius: 8px; cursor: pointer;
 }
 .seg button[aria-pressed="true"] { background: var(--panel); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.15); }
 .seg button:disabled { opacity: .4; cursor: default; }
@@ -268,12 +268,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   <div class="controls">
     <div class="seg" role="group" aria-label="Difficulty">
       <button type="button" id="mode-easy" data-mode="easy">Easy</button>
+      <button type="button" id="mode-medium" data-mode="medium">Medium</button>
       <button type="button" id="mode-hard" data-mode="hard">Hard</button>
-    </div>
-    <div class="seg" role="group" aria-label="Code length" id="len-group">
-      <button type="button" id="len-4" data-len="4">4</button>
-      <button type="button" id="len-5" data-len="5">5</button>
-      <button type="button" id="len-6" data-len="6">6</button>
+      <button type="button" id="mode-expert" data-mode="expert">Expert</button>
     </div>
     <div class="turns"><span id="turns"></span> · <span id="timer">0:00</span></div>
   </div>
@@ -337,7 +334,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <h3>Cross out</h3>
     <p>Tap <b>✕ Cross out</b>, then a digit, to put a red X on it as a reminder. Do the same again to clear it.</p>
     <h3>Modes</h3>
-    <p><b>Easy:</b> four digits with no repeats. <b>Hard:</b> four, five or six digits, and digits can repeat. Each digit in the code lights up only one light, so if the code is &ldquo;1123&rdquo; and you guess &ldquo;1111&rdquo;, you get two green and two off.</p>
+    <p>A code never repeats a digit. <b>Easy</b> codes have three digits, <b>Medium</b> four, <b>Hard</b> five and <b>Expert</b> six. Every level gives you ten guesses.</p>
     <h3>Winning</h3>
     <p>All green cracks the code. If you run out of guesses, the code is revealed. The timer starts on your first tap, and <b>Stats</b> tracks your streaks, wins and best times.</p>
     <button class="primary" type="button" id="help-close">Got it</button>
@@ -429,8 +426,14 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   }
 
   // ---------- stats ----------
-  function statsKey(state) { return state.mode === "easy" ? "easy" : "hard-" + state.len; }
-  function modeLabel(state) { return state.mode === "easy" ? "Easy · 4 digits" : "Hard · " + state.len + " digits"; }
+  const LEVELS = { easy: { label: "Easy", len: 3 }, medium: { label: "Medium", len: 4 }, hard: { label: "Hard", len: 5 }, expert: { label: "Expert", len: 6 } };
+  function statsKey(state) { return "lvl-" + state.mode; }
+  // Old 4-digit "easy" stats had no repeats, the same as Medium now.
+  (function migrateStats() {
+    const all = load("ctc-stats", {});
+    if (all.easy && !all["lvl-medium"]) { all["lvl-medium"] = all.easy; save("ctc-stats", all); }
+  })();
+  function modeLabel(state) { return LEVELS[state.mode].label + " · " + state.len + " digits"; }
   function emptyStats() { return { played: 0, won: 0, lost: 0, streak: 0, best: 0, dist: Array(MAX_TURNS).fill(0), fastestMs: null, totalWinMs: 0 }; }
 
   // ---------- timer ----------
@@ -470,14 +473,14 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   // ---------- state ----------
   let state;
-  function newGame(mode, len) {
-    const prefs = load("ctc-prefs", { mode: "easy", hardLen: 4 });
-    mode = mode || prefs.mode;
-    len = mode === "easy" ? 4 : (len || prefs.hardLen);
-    save("ctc-prefs", { mode, hardLen: mode === "hard" ? len : prefs.hardLen });
+  function newGame(mode) {
+    const prefs = load("ctc-level", "medium");
+    mode = LEVELS[mode] ? mode : (LEVELS[prefs] ? prefs : "medium");
+    const len = LEVELS[mode].len;
+    save("ctc-level", mode);
     state = {
       mode, len,
-      code: makeCode(len, mode === "hard"),
+      code: makeCode(len, false),
       guesses: [],
       current: [],
       over: false, won: false,
@@ -499,8 +502,8 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   function typeDigit(d) {
     if (state.over || state.current.length >= state.len) return;
-    if (state.mode === "easy" && state.current.includes(d)) {
-      setMessage("No repeated digits in easy mode.", true);
+    if (state.current.includes(d)) {
+      setMessage("Codes never repeat a digit.", true);
       return;
     }
     if (!state.startedAt) state.startedAt = Date.now();
@@ -590,19 +593,16 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     $("turns").innerHTML = "<b>" + left + "</b> " + (left === 1 ? "guess" : "guesses") + " left";
     renderTimer();
 
-    $("mode-easy").setAttribute("aria-pressed", String(state.mode === "easy"));
-    $("mode-hard").setAttribute("aria-pressed", String(state.mode === "hard"));
-    $("len-group").hidden = state.mode !== "hard";
-    for (const n of [4, 5, 6]) $("len-" + n).setAttribute("aria-pressed", String(state.len === n));
-    // Lock the mode once a game is under way so a stray tap can't end it.
+    // Lock the level once a game is under way so a stray tap can't end it.
     const locked = inProgress();
-    $("mode-easy").hidden = locked && state.mode !== "easy";
-    $("mode-hard").hidden = locked && state.mode !== "hard";
-    for (const n of [4, 5, 6]) $("len-" + n).hidden = locked && state.len !== n;
+    for (const m in LEVELS) {
+      $("mode-" + m).setAttribute("aria-pressed", String(state.mode === m));
+      $("mode-" + m).hidden = locked && state.mode !== m;
+    }
 
     document.querySelectorAll(".key[data-d]").forEach((k) => {
       const d = Number(k.dataset.d);
-      k.disabled = state.over || (!state.marking && state.mode === "easy" && state.current.includes(d));
+      k.disabled = state.over || (!state.marking && state.current.includes(d));
       k.classList.toggle("crossed", (state.crossed || []).includes(d));
       k.setAttribute("aria-label", d + ((state.crossed || []).includes(d) ? ", crossed out" : ""));
     });
@@ -671,13 +671,11 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     if (!$("stats").hidden || !$("settings").hidden || !$("help").hidden) { if (e.key === "Escape") { $("stats").hidden = true; $("settings").hidden = true; $("help").hidden = true; } return; }
     if (/^[0-9]$/.test(e.key)) typeDigit(Number(e.key));
     else if (e.key === "Backspace") deleteDigit();
-    else if (e.key === "Enter") { e.preventDefault(); state.over ? newGame(state.mode, state.len) : submit(); }
+    else if (e.key === "Enter") { e.preventDefault(); state.over ? newGame(state.mode) : submit(); }
   });
-  $("mode-easy").addEventListener("click", () => { if (state.mode !== "easy" && !inProgress()) newGame("easy"); });
-  $("mode-hard").addEventListener("click", () => { if (state.mode !== "hard" && !inProgress()) newGame("hard"); });
-  for (const n of [4, 5, 6]) $("len-" + n).addEventListener("click", () => { if (state.len !== n && !inProgress()) newGame("hard", n); });
+  for (const m in LEVELS) $("mode-" + m).addEventListener("click", () => { if (state.mode !== m && !inProgress()) newGame(m); });
   $("mark").addEventListener("click", toggleMarking);
-  $("again").addEventListener("click", () => newGame(state.mode, state.len));
+  $("again").addEventListener("click", () => newGame(state.mode));
   $("stats-btn").addEventListener("click", () => { renderStats(); $("stats").hidden = false; $("stats-close").focus(); });
   $("stats-close").addEventListener("click", () => { $("stats").hidden = true; });
   $("stats").addEventListener("click", (e) => { if (e.target.id === "stats") $("stats").hidden = true; });
@@ -725,7 +723,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   // Keep an in-progress game when the page updates.
   function start(data) {
-    if (data && data.state && data.state.code) { state = data.state; state.guesses.forEach((g) => { g.lights = orderedLights(g.score); }); render(); }
+    if (data && data.state && data.state.code && LEVELS[data.state.mode] && LEVELS[data.state.mode].len === data.state.len) { state = data.state; state.guesses.forEach((g) => { g.lights = orderedLights(g.score); }); render(); }
     else newGame();
   }
   window.claude?.hot?.snapshot?.(() => ({ state }));
