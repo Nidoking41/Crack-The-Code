@@ -27,6 +27,7 @@ body{margin:0}
   --lamp-orange: #e8850c;
   --lamp-off: #b3bdc7;
   --danger: #b4322a;
+  --x-red: #e02424;
   --font-display: "Chakra Petch", "Arial Narrow", system-ui, sans-serif;
   --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-digits: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -35,14 +36,14 @@ body{margin:0}
   :root:not([data-theme="light"]) {
     --bg: #0e141a; --panel: #172029; --well: #0a0f14; --fg: #e4ebf2; --muted: #8c9bab;
     --line: #2a3643; --accent: #e3a548; --accent-fg: #1a1206;
-    --lamp-green: #38d873; --lamp-orange: #ffa733; --lamp-off: #2b3743; --danger: #ff6b5e;
+    --lamp-green: #38d873; --lamp-orange: #ffa733; --lamp-off: #2b3743; --danger: #ff6b5e; --x-red: #ff4040;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0e141a; --panel: #172029; --well: #0a0f14; --fg: #e4ebf2; --muted: #8c9bab;
   --line: #2a3643; --accent: #e3a548; --accent-fg: #1a1206;
-  --lamp-green: #38d873; --lamp-orange: #ffa733; --lamp-off: #2b3743; --danger: #ff6b5e;
+  --lamp-green: #38d873; --lamp-orange: #ffa733; --lamp-off: #2b3743; --danger: #ff6b5e; --x-red: #ff4040;
   color-scheme: dark;
 }
 
@@ -140,6 +141,25 @@ h1 span { color: var(--accent); }
 .key:disabled { opacity: .3; cursor: default; }
 .key.enter { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-family: var(--font-body); font-size: 0.95rem; text-transform: uppercase; letter-spacing: .06em; box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 60%, black); }
 .key.del { font-family: var(--font-body); font-size: 0.95rem; }
+.key { position: relative; overflow: hidden; }
+.key.crossed { color: var(--muted); }
+.key.crossed::before, .key.crossed::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 46px; height: 6px; border-radius: 3px;
+  background: var(--x-red); transform: translate(-50%, -50%) rotate(45deg); pointer-events: none;
+}
+.key.crossed::after { transform: translate(-50%, -50%) rotate(-45deg); }
+.marking .key[data-d] { border-style: dashed; border-color: var(--x-red); }
+.tools { display: flex; align-items: center; gap: 10px; }
+.mark-btn {
+  font: 700 0.85rem var(--font-body); text-transform: uppercase; letter-spacing: .06em;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 10px;
+  padding: 9px 14px; cursor: pointer; white-space: nowrap;
+}
+.mark-btn .x { color: var(--x-red); font-size: 1.2rem; line-height: 1; }
+.mark-btn[aria-pressed="true"] { background: var(--x-red); color: #fff; border-color: var(--x-red); }
+.mark-btn[aria-pressed="true"] .x { color: #fff; }
+.tools .hint { font-size: .8rem; color: var(--muted); }
 
 button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -218,6 +238,11 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <div class="code" id="result-code"></div>
     <div id="result-text"></div>
     <button class="primary" type="button" id="again">Play again</button>
+  </div>
+
+  <div class="tools" id="tools">
+    <button class="mark-btn" type="button" id="mark" aria-pressed="false"><span class="x" aria-hidden="true">✕</span>Cross out</button>
+    <span class="hint" id="mark-hint"></span>
   </div>
 
   <div class="keypad" id="keypad">
@@ -367,6 +392,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       current: [],
       over: false, won: false,
       startedAt: null, endedAt: null,
+      crossed: [], marking: false,
     };
     setMessage("");
     render();
@@ -386,6 +412,17 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     }
     if (!state.startedAt) state.startedAt = Date.now();
     state.current.push(d);
+    setMessage("");
+    render();
+  }
+  function toggleCross(d) {
+    const i = state.crossed.indexOf(d);
+    if (i >= 0) state.crossed.splice(i, 1); else state.crossed.push(d);
+    render();
+  }
+  function toggleMarking() {
+    if (state.over) return;
+    state.marking = !state.marking;
     setMessage("");
     render();
   }
@@ -465,8 +502,14 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     document.querySelectorAll(".key[data-d]").forEach((k) => {
       const d = Number(k.dataset.d);
-      k.disabled = state.over || (state.mode === "easy" && state.current.includes(d));
+      k.disabled = state.over || (!state.marking && state.mode === "easy" && state.current.includes(d));
+      k.classList.toggle("crossed", (state.crossed || []).includes(d));
+      k.setAttribute("aria-label", d + ((state.crossed || []).includes(d) ? ", crossed out" : ""));
     });
+    $("keypad").classList.toggle("marking", !!state.marking);
+    $("mark").setAttribute("aria-pressed", String(!!state.marking));
+    $("mark-hint").textContent = state.marking ? "Tap a digit to cross it out or undo. Tap Cross out again when done." : "";
+    $("tools").hidden = state.over;
     $("del").disabled = state.over;
     $("enter").disabled = state.over;
     $("keypad").hidden = state.over;
@@ -517,7 +560,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   $("keypad").addEventListener("click", (e) => {
     const k = e.target.closest("button");
     if (!k || k.disabled) return;
-    if (k.dataset.d !== undefined) typeDigit(Number(k.dataset.d));
+    if (k.dataset.d !== undefined) {
+      if (state.marking) toggleCross(Number(k.dataset.d));
+      else typeDigit(Number(k.dataset.d));
+    }
     else if (k.id === "del") deleteDigit();
     else if (k.id === "enter") submit();
   });
@@ -530,6 +576,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   $("mode-easy").addEventListener("click", () => { if (state.mode !== "easy") newGame("easy"); });
   $("mode-hard").addEventListener("click", () => { if (state.mode !== "hard") newGame("hard"); });
   for (const n of [4, 5, 6]) $("len-" + n).addEventListener("click", () => { if (state.len !== n) newGame("hard", n); });
+  $("mark").addEventListener("click", toggleMarking);
   $("again").addEventListener("click", () => newGame(state.mode, state.len));
   $("stats-btn").addEventListener("click", () => { renderStats(); $("stats").hidden = false; $("stats-close").focus(); });
   $("stats-close").addEventListener("click", () => { $("stats").hidden = true; });
