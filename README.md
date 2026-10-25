@@ -1,6 +1,8 @@
-# Crack the Code
+# Defuse the Bomb
 
-A casual phone game where you crack a secret number code, similar to Mastermind but with digits.
+A casual phone game where you defuse a bomb by cracking its secret number code, similar to Mastermind but with digits.
+
+The game opens on a title screen with **Quick Play**, **Campaign**, **How to Play** and **Stats**.
 
 ## How to play
 
@@ -30,17 +32,18 @@ Codes never repeat a digit. Every level gives you 10 guesses.
 
 After your first guess, the other levels are hidden until the game ends, so a stray tap can't quit your game.
 
-## Timer and stats
+## Quick Play and Campaign
 
-A timer starts when you tap your first digit and stops when the game ends. The **Stats** button shows each level's stats separately:
+- **Quick Play:** one bomb, 10 guesses, no countdown. The clock records how long you took.
+- **Campaign:** defuse bomb after bomb at the level you pick. Level 1 gives you 5:00, and each level after that has 15 seconds less (never under 15 seconds). Under one minute the bomb flashes and pulses. Running out of time or guesses ends the campaign.
+- **Concede:** tap Concede twice to give up and return to the title screen. It counts as a loss.
 
-- Games played and win percentage
-- Current streak and best streak
-- Codes cracked and failed
-- Fastest and average crack time (counting only wins)
-- How many codes you cracked in 1 to 10 guesses
+## Stats
 
-Stats are saved in your browser on your device.
+Stats are split by Quick Play and Campaign, and by level, and saved in your browser:
+
+- Quick Play: games played, win %, current and best streak, bombs defused and exploded, average guesses, fastest and average defuse time, and a guess breakdown.
+- Campaign: highest level cleared, runs, bombs defused, runs ended, average guesses, fastest and average defuse time, and a guess breakdown.
 
 ## Settings
 
