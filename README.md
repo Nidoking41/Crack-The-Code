@@ -30,6 +30,8 @@ Codes never repeat a digit. Every level gives you 10 guesses.
 | Hard | 5 digits |
 | Expert | 6 digits |
 
+The lights form a shape with one light per digit: a triangle on Easy, a square on Medium, a pentagon on Hard and a hexagon on Expert. On the square they fill in reading order; on the other shapes they start at the top and go clockwise.
+
 After your first guess, the other levels are hidden until the game ends, so a stray tap can't quit your game.
 
 ## Quick Play and Campaign
