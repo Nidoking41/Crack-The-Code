@@ -456,7 +456,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       <div class="ex-row"><span class="ex-label">Guess</span><span class="ex-code">5617</span><span class="lights"><i class="lamp o"></i><i class="lamp"></i><i class="lamp"></i><i class="lamp"></i></span><span class="ex-note">One orange for the &ldquo;1&rdquo;, which is in the code but in a different spot. The other three lights are off.</span></div>
     </div>
     <h3>Cross out</h3>
-    <p>Tap <b>✕ Cross out</b>, then a digit, to put a red X on it as a reminder. Do the same again to clear it.</p>
+    <p>Tap <b>✕ Cross out</b> to turn on cross-out mode, then tap digits to put a red X on them as a reminder. Tap a crossed digit to clear its X. Tap <b>✕ Cross out</b> again to go back to typing.</p>
     <h3>Levels</h3>
     <p><b>Easy</b> codes have three digits, <b>Medium</b> four, <b>Hard</b> five and <b>Expert</b> six. The lights form a triangle on Easy, a square on Medium, a pentagon on Hard and a hexagon on Expert. On the triangle, pentagon and hexagon, lights fill in from the top and go clockwise.</p>
     <h3>Quick Play</h3>
@@ -733,7 +733,6 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   function toggleCross(d) {
     const i = state.crossed.indexOf(d);
     if (i >= 0) state.crossed.splice(i, 1); else state.crossed.push(d);
-    state.marking = false;
     setMessage("");
     render();
   }
@@ -861,7 +860,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     });
     $("keypad").classList.toggle("marking", state.marking);
     $("mark").setAttribute("aria-pressed", String(state.marking));
-    if (state.marking) setMessage("Tap a digit to cross it out or clear its X.");
+    if (state.marking) setMessage("Tap digits to cross out or clear. Tap Cross out again when done.");
     $("keypad").hidden = !playing;
     $("status-row").hidden = !playing;
 
