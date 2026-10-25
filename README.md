@@ -36,8 +36,9 @@ After your first guess, the other levels are hidden until the game ends, so a st
 
 ## Quick Play and Campaign
 
-- **Quick Play:** one bomb, 10 guesses, no countdown. The clock records how long you took.
+- **Quick Play:** one bomb, 10 guesses, no countdown. The clock records how long you took. The bomb flashes on your last two guesses, harder on the final one.
 - **Campaign:** defuse bomb after bomb at the level you pick. Level 1 gives you 5:00, and each level after that has 15 seconds less (never under 30 seconds, which is reached at level 19). Under one minute the bomb flashes and pulses. Running out of time or guesses ends the campaign.
+- **Explosion:** whenever a bomb goes off, in either mode, the screen flashes and shakes with a BOOM.
 - **Concede:** tap Concede twice to give up and return to the title screen. It counts as a loss.
 
 ## Stats
