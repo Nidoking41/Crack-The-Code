@@ -1,0 +1,62 @@
+# Store builds for Defuse the Bomb, run on Codemagic (https://codemagic.io).
+# Codemagic supplies the Mac needed to build the iPhone app.
+# Setup steps are in STORE-GUIDE.md.
+
+workflows:
+  ios-release:
+    name: iPhone app → TestFlight
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      # The name you give the App Store Connect API key in Codemagic.
+      app_store_connect: Defuse the Bomb
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.nidoking41.defusethebomb
+      node: 22
+      xcode: latest
+    scripts:
+      - name: Install and copy the game into the app
+        script: |
+          npm ci
+          npm run sync
+      - name: Set up code signing
+        script: xcode-project use-profiles
+      - name: Give this build a new number
+        script: |
+          cd ios/App
+          agvtool new-version -all $BUILD_NUMBER
+      - name: Build the iPhone app
+        script: |
+          xcode-project build-ipa \
+            --project ios/App/App.xcodeproj \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+
+  android-release:
+    name: Android app bundle (upload it in the Play Console)
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      android_signing:
+        # The name you give your upload key in Codemagic.
+        - defuse_upload_key
+      node: 22
+      java: 21
+    scripts:
+      - name: Install and copy the game into the app
+        script: |
+          npm ci
+          npm run sync
+      - name: Build the Android app bundle
+        script: |
+          cd android
+          ./gradlew bundleRelease -PversionCode=$BUILD_NUMBER
+    artifacts:
+      - android/app/build/outputs/bundle/release/*.aab
