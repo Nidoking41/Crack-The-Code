@@ -1,0 +1,9 @@
+{
+  "appId": "com.nidoking41.defusethebomb",
+  "appName": "Defuse the Bomb",
+  "webDir": "www",
+  "backgroundColor": "#14202b",
+  "ios": {
+    "contentInset": "never"
+  }
+}

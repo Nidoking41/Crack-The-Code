@@ -55,3 +55,7 @@ The **Settings** button lets you pick a color scheme: Auto (matches your device'
 ## Playing it online
 
 To get a link you can open on your phone, turn on GitHub Pages: in this repository go to **Settings → Pages**, set the source to **Deploy from a branch**, choose `main` and `/ (root)`, and save. After a minute or so, the game appears at `https://nidoking41.github.io/Crack-The-Code/`.
+
+## Phone apps
+
+The game is also packaged as an iPhone and Android app with [Capacitor](https://capacitorjs.com). The `ios/` and `android/` folders hold the app projects, and [STORE-GUIDE.md](STORE-GUIDE.md) walks through publishing to the App Store and Google Play. The privacy policy for the stores is [privacy.html](privacy.html).
