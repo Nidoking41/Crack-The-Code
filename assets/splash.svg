@@ -9,8 +9,8 @@
     <g transform="translate(44 60)">
       <circle cx="-8" cy="-7" r="5.2" fill="#22c55e"/>
       <circle cx="8" cy="-7" r="5.2" fill="#22c55e"/>
-      <circle cx="-8" cy="7" r="5.2" fill="#f59e0b"/>
-      <circle cx="8" cy="7" r="5.2" fill="#5b6470"/>
+      <circle cx="-8" cy="7" r="5.2" fill="#22c55e"/>
+      <circle cx="8" cy="7" r="5.2" fill="#22c55e"/>
     </g>
   </g>
 </svg>
