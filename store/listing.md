@@ -4,7 +4,9 @@ Copy and paste these into App Store Connect (Apple) and the Play Console (Google
 
 ## Both stores
 
-**App name:** Defuse the Bomb
+**App name:** Crack the Code!
+
+Apple needs every app name to be unique. If "Crack the Code!" is already taken, use **Crack the Code!: Defuse It** (or ask Claude for another).
 
 **Category:** Games → Puzzle (Apple: primary category Games, subcategory Puzzle)
 
@@ -14,7 +16,7 @@ Copy and paste these into App Store Connect (Apple) and the Play Console (Google
 
 ## Apple only
 
-**Subtitle** (30 characters max): Crack the code, beat the clock
+**Subtitle** (30 characters max): Defuse the bomb in time
 
 **Promotional text** (170 max):
 Crack the secret code before the fuse burns down. Ten guesses, four difficulty levels, and a Campaign that gets faster every level.
@@ -41,7 +43,7 @@ Crack the secret number code before the bomb goes off. A quick logic puzzle.
 
 A bomb is ticking. The only way to stop it is to crack its secret number code.
 
-Defuse the Bomb is a quick logic puzzle in the spirit of the classic code-breaking game. Guess the code, read the lights, and narrow it down:
+Crack the Code is a quick logic puzzle in the spirit of the classic code-breaking game. Guess the code, read the lights, and narrow it down:
 
 • Green light: right digit in the right spot
 • Orange light: right digit in the wrong spot

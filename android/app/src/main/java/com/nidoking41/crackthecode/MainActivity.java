@@ -1,4 +1,4 @@
-package com.nidoking41.defusethebomb;
+package com.nidoking41.crackthecode;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -9,7 +9,7 @@
     <path d="M86 0 L89 6 L96 6 L90 10 L93 17 L86 12 L79 17 L82 10 L76 6 L83 6 Z" fill="#ffc93a"/>
     <g transform="translate(44 60)"><circle cx="-8" cy="-7" r="5.2" fill="#22c55e"/><circle cx="8" cy="-7" r="5.2" fill="#22c55e"/><circle cx="-8" cy="7" r="5.2" fill="#22c55e"/><circle cx="8" cy="7" r="5.2" fill="#22c55e"/></g>
   </g>
-  <text x="470" y="235" fill="#e3e8ed" font-family="Chakra Petch" font-weight="700" font-size="74">DEFUSE THE</text>
-  <text x="470" y="320" fill="#f2a33a" font-family="Chakra Petch" font-weight="700" font-size="96">BOMB</text>
-  <text x="472" y="372" fill="#9aa7b4" font-family="IBM Plex Sans" font-size="30">Crack the code before it goes off.</text>
+  <text x="470" y="235" fill="#e3e8ed" font-family="Chakra Petch" font-weight="700" font-size="84">CRACK THE</text>
+  <text x="470" y="320" fill="#f2a33a" font-family="Chakra Petch" font-weight="700" font-size="104">CODE</text>
+  <text x="472" y="372" fill="#9aa7b4" font-family="IBM Plex Sans" font-size="30">Defuse the bomb before it goes off.</text>
 </svg>

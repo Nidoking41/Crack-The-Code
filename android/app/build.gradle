@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "com.nidoking41.defusethebomb"
+    namespace = "com.nidoking41.crackthecode"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.nidoking41.defusethebomb"
+        applicationId "com.nidoking41.crackthecode"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // Codemagic passes a new versionCode for every store build.

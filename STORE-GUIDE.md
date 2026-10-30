@@ -1,4 +1,4 @@
-# Putting Defuse the Bomb on the App Store and Google Play
+# Putting Crack the Code on the App Store and Google Play
 
 Everything that can be built is already in this repository: the iPhone and Android app projects, the icon, the splash screen, the privacy policy, the store screenshots and the store text. What's left are the steps only you can do, because they need your accounts and your payment details.
 
@@ -46,13 +46,13 @@ The stores need a privacy policy link. It's already written (`privacy.html`); Gi
 The key that proves Android updates come from you is already made. It's in the project's Library, in the `app-signing` folder, together with a note that has its passwords. **Keep both files private and don't put them on GitHub.**
 
 1. In Codemagic, open **Settings** (your user or team settings) **→ Code signing identities → Android keystores**.
-2. Upload `defuse-upload.keystore`, type the password and alias from the note, and set the **Reference name** to `defuse_upload_key`.
+2. Upload `crack-the-code-upload.keystore`, type the password and alias from the note, and set the **Reference name** to `crack_the_code_upload_key`.
 
 ### Connect your Apple account (after Apple approves you)
 
 1. Go to <https://appstoreconnect.apple.com> → **Users and Access → Integrations → App Store Connect API**. Request access if asked, then click **+** to make a key. Name it "Codemagic" and give it the **App Manager** role.
 2. Download the key file (`.p8`). Apple only lets you download it once, so save it. Note the **Issuer ID** and **Key ID** shown on the page.
-3. In Codemagic, open **Settings → Integrations → Developer Portal → Connect**. Name the key exactly `Defuse the Bomb`, then paste the Issuer ID and Key ID and upload the `.p8` file.
+3. In Codemagic, open **Settings → Integrations → Developer Portal → Connect**. Name the key exactly `Crack the Code`, then paste the Issuer ID and Key ID and upload the `.p8` file.
 
 ---
 
@@ -61,14 +61,14 @@ The key that proves Android updates come from you is already made. It's in the p
 ### Apple
 
 1. In App Store Connect go to **Apps → + → New App**.
-2. Platform **iOS**, name **Defuse the Bomb**, language **English (U.S.)**.
-3. For **Bundle ID**: if `com.nidoking41.defusethebomb` isn't in the list, open <https://developer.apple.com/account/resources/identifiers/list>, click **+**, pick **App IDs → App**, enter that exact ID with any description, save, and come back.
-4. **SKU** can be anything, for example `defusethebomb`. Click **Create**.
+2. Platform **iOS**, name **Crack the Code!**, language **English (U.S.)**.
+3. For **Bundle ID**: if `com.nidoking41.crackthecode` isn't in the list, open <https://developer.apple.com/account/resources/identifiers/list>, click **+**, pick **App IDs → App**, enter that exact ID with any description, save, and come back.
+4. **SKU** can be anything, for example `crackthecode`. Click **Create**.
 
 ### Google
 
 1. In the Play Console click **Create app**.
-2. Name **Defuse the Bomb**, language English, **Game**, **Free**, tick the declarations, and click **Create app**.
+2. Name **Crack the Code!**, language English, **Game**, **Free**, tick the declarations, and click **Create app**.
 
 ---
 
@@ -83,7 +83,7 @@ In Codemagic, open the app and click **Start new build**. Pick the `main` branch
 
 1. Install the **TestFlight** app from the App Store on your iPhone.
 2. In App Store Connect, open the app → **TestFlight → Internal Testing**, click **+**, make a group, and add yourself.
-3. Open TestFlight on your iPhone and install Defuse the Bomb.
+3. Open TestFlight on your iPhone and install Crack the Code.
 
 ---
 
@@ -120,6 +120,6 @@ Click **Add for Review**, then **Submit**. Review usually takes one to three day
 
 - `index.html` is still the game. `npm run build` copies it into `www/` with the fonts bundled so the app works offline, and `npm run sync` also updates the `ios/` and `android/` projects.
 - `npm run assets` regenerates the icons and splash screens from `assets/`.
-- The app ID on both stores is `com.nidoking41.defusethebomb`. It can't change after the first upload.
+- The app ID on both stores is `com.nidoking41.crackthecode`. It can't change after the first upload.
 - The app is iPhone only and portrait only, which keeps the screenshots and review simple. iPads can still run it in iPhone mode.
 - `.github/workflows/app-build.yml` checks that both apps still build on every change.
