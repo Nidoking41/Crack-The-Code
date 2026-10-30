@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Crack the Code</string>
-    <string name="title_activity_main">Crack the Code</string>
+    <string name="app_name">Crack the Code!</string>
+    <string name="title_activity_main">Crack the Code!</string>
     <string name="package_name">com.nidoking41.crackthecode</string>
     <string name="custom_url_scheme">com.nidoking41.crackthecode</string>
 </resources>

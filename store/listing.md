@@ -4,9 +4,9 @@ Copy and paste these into App Store Connect (Apple) and the Play Console (Google
 
 ## Both stores
 
-**App name:** Crack the Code
+**App name:** Crack the Code!
 
-Apple needs every app name to be unique. If "Crack the Code" is already taken, use **Crack the Code: Defuse It** (or ask Claude for another).
+Apple needs every app name to be unique. If "Crack the Code!" is already taken, use **Crack the Code!: Defuse It** (or ask Claude for another).
 
 **Category:** Games → Puzzle (Apple: primary category Games, subcategory Puzzle)
 

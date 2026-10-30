@@ -61,14 +61,14 @@ The key that proves Android updates come from you is already made. It's in the p
 ### Apple
 
 1. In App Store Connect go to **Apps → + → New App**.
-2. Platform **iOS**, name **Crack the Code**, language **English (U.S.)**.
+2. Platform **iOS**, name **Crack the Code!**, language **English (U.S.)**.
 3. For **Bundle ID**: if `com.nidoking41.crackthecode` isn't in the list, open <https://developer.apple.com/account/resources/identifiers/list>, click **+**, pick **App IDs → App**, enter that exact ID with any description, save, and come back.
 4. **SKU** can be anything, for example `crackthecode`. Click **Create**.
 
 ### Google
 
 1. In the Play Console click **Create app**.
-2. Name **Crack the Code**, language English, **Game**, **Free**, tick the declarations, and click **Create app**.
+2. Name **Crack the Code!**, language English, **Game**, **Free**, tick the declarations, and click **Create app**.
 
 ---
 
