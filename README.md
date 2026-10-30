@@ -1,4 +1,4 @@
-# Defuse the Bomb
+# Crack the Code
 
 A casual phone game where you defuse a bomb by cracking its secret number code, similar to Mastermind but with digits.
 

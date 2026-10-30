@@ -1,4 +1,4 @@
-# Store builds for Defuse the Bomb, run on Codemagic (https://codemagic.io).
+# Store builds for Crack the Code, run on Codemagic (https://codemagic.io).
 # Codemagic supplies the Mac needed to build the iPhone app.
 # Setup steps are in STORE-GUIDE.md.
 
@@ -9,11 +9,11 @@ workflows:
     instance_type: mac_mini_m2
     integrations:
       # The name you give the App Store Connect API key in Codemagic.
-      app_store_connect: Defuse the Bomb
+      app_store_connect: Crack the Code
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.nidoking41.defusethebomb
+        bundle_identifier: com.nidoking41.crackthecode
       node: 22
       xcode: latest
     scripts:
@@ -46,7 +46,7 @@ workflows:
     environment:
       android_signing:
         # The name you give your upload key in Codemagic.
-        - defuse_upload_key
+        - crack_the_code_upload_key
       node: 22
       java: 21
     scripts:

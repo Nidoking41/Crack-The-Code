@@ -1,8 +1,8 @@
 {
-  "name": "defuse-the-bomb",
+  "name": "crack-the-code",
   "version": "1.0.0",
   "private": true,
-  "description": "Defuse the Bomb: crack the code before it goes off.",
+  "description": "Crack the Code: crack the code before it goes off.",
   "scripts": {
     "build": "node scripts/build-www.mjs",
     "sync": "npm run build && npx cap sync",

@@ -1,22 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
-      <stop offset="0" stop-color="#f2a33a"/>
-      <stop offset="1" stop-color="#a8641a"/>
+    <radialGradient id="bg" cx="50%" cy="40%" r="75%">
+      <stop offset="0" stop-color="#f2a33a"/><stop offset="1" stop-color="#a8641a"/>
     </radialGradient>
   </defs>
   <rect width="1024" height="1024" fill="url(#bg)"/>
-  <g transform="translate(152 182) scale(7.2)">
-    <path d="M60 26 C 66 14, 76 16, 84 10" fill="none" stroke="#5a3d1c" stroke-width="5" stroke-linecap="round"/>
-    <rect x="48" y="20" width="20" height="14" rx="3" transform="rotate(32 58 27)" fill="#23272e"/>
-    <circle cx="44" cy="60" r="33" fill="#23272e"/>
-    <ellipse cx="28" cy="43" rx="8" ry="4.5" transform="rotate(-35 28 43)" fill="#fff" opacity=".28"/>
-    <path d="M86 0 L89 6 L96 6 L90 10 L93 17 L86 12 L79 17 L82 10 L76 6 L83 6 Z" fill="#ffe27a" stroke="#fff6c8" stroke-width="1"/>
-    <g transform="translate(44 60)">
-      <circle cx="-8" cy="-7" r="5.2" fill="#22c55e"/>
-      <circle cx="8" cy="-7" r="5.2" fill="#22c55e"/>
-      <circle cx="-8" cy="7" r="5.2" fill="#22c55e"/>
-      <circle cx="8" cy="7" r="5.2" fill="#22c55e"/>
-    </g>
+  <!-- bomb -->
+  <g id="bomb">
+    <path d="M735 330 C 770 250, 830 260, 870 205" fill="none" stroke="#5a3d1c" stroke-width="26" stroke-linecap="round"/>
+    <rect x="655" y="300" width="130" height="95" rx="18" transform="rotate(32 720 347)" fill="#23272e"/>
+    <circle cx="660" cy="640" r="270" fill="#23272e"/>
+    <ellipse cx="560" cy="470" rx="60" ry="32" transform="rotate(-35 560 470)" fill="#fff" opacity=".22"/>
+    <path d="M880 150 L895 185 L935 185 L903 208 L917 246 L880 222 L843 246 L857 208 L825 185 L865 185 Z" fill="#ffe27a" stroke="#fff6c8" stroke-width="6"/>
+    <!-- keypad panel -->
+    <rect x="600" y="520" width="220" height="200" rx="24" fill="#14181d" stroke="#3a414b" stroke-width="8"/>
+    <circle cx="665" cy="585" r="32" fill="#22c55e"/><circle cx="755" cy="585" r="32" fill="#22c55e"/>
+    <circle cx="665" cy="660" r="32" fill="#22c55e"/><circle cx="755" cy="660" r="32" fill="#22c55e"/>
+  </g>
+  <!-- guy -->
+  <g id="guy">
+    <!-- body -->
+    <path d="M40 1024 C 40 820, 120 740, 260 730 C 400 740, 470 820, 480 1024 Z" fill="#2f5d8a"/>
+    <path d="M200 735 L260 820 L320 735 Z" fill="#244a6e"/>
+    <!-- arm reaching to keypad -->
+    <path d="M380 870 C 450 830, 500 800, 545 785" fill="none" stroke="#2f5d8a" stroke-width="80" stroke-linecap="round"/>
+    <circle cx="560" cy="775" r="42" fill="#f1c27d"/>
+    <path d="M580 750 L625 718" stroke="#f1c27d" stroke-width="30" stroke-linecap="round"/>
+    <!-- neck + head -->
+    <rect x="225" y="640" width="70" height="100" rx="20" fill="#e0ac69"/>
+    <circle cx="260" cy="540" r="150" fill="#f1c27d"/>
+    <!-- helmet -->
+    <path d="M100 540 A160 160 0 0 1 420 540 L420 500 L100 500 Z" fill="#3e5c3a"/>
+    <path d="M105 525 A158 158 0 0 1 415 525" fill="none" stroke="#2d4429" stroke-width="16"/>
+    <rect x="95" y="500" width="335" height="38" rx="19" fill="#2d4429"/>
+    <!-- face: looking right, focused -->
+    <circle cx="300" cy="590" r="17" fill="#14202b"/><circle cx="375" cy="590" r="17" fill="#14202b"/>
+    <path d="M275 560 L325 568" stroke="#14202b" stroke-width="12" stroke-linecap="round"/>
+    <path d="M355 568 L398 560" stroke="#14202b" stroke-width="12" stroke-linecap="round"/>
+    <path d="M325 660 Q 350 650 372 660" fill="none" stroke="#14202b" stroke-width="10" stroke-linecap="round"/>
+    <!-- sweat drop -->
+    <path d="M205 560 C 190 590, 190 610, 205 615 C 220 610, 220 590, 205 560 Z" fill="#8fd3ff"/>
   </g>
 </svg>
