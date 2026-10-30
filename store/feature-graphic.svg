@@ -1,41 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500" width="1024" height="500">
-<defs><radialGradient id="g" cx="25%" cy="50%" r="70%"><stop offset="0" stop-color="#2a3a4a"/><stop offset="1" stop-color="#14202b"/></radialGradient><radialGradient id="bg" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#f2a33a"/><stop offset="1" stop-color="#a8641a"/></radialGradient><clipPath id="c"><rect width="1024" height="1024" rx="200"/></clipPath></defs>
+<defs><radialGradient id="g" cx="25%" cy="50%" r="70%"><stop offset="0" stop-color="#2a3a4a"/><stop offset="1" stop-color="#14202b"/></radialGradient><radialGradient id="bg" cx="50%" cy="35%" r="75%">
+      <stop offset="0" stop-color="#f2a33a"/><stop offset="1" stop-color="#a8641a"/>
+    </radialGradient><radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0" stop-color="#1f4630"/><stop offset="1" stop-color="#0d1712"/>
+    </radialGradient><clipPath id="c"><rect width="1024" height="1024" rx="200"/></clipPath></defs>
 <rect width="1024" height="500" fill="url(#g)"/>
-<g transform="translate(60 50) scale(0.39)" clip-path="url(#c)"><rect width="1024" height="1024" fill="url(#bg)"/><!-- bomb -->
-  <g id="bomb">
-    <path d="M735 330 C 770 250, 830 260, 870 205" fill="none" stroke="#5a3d1c" stroke-width="26" stroke-linecap="round"/>
-    <rect x="655" y="300" width="130" height="95" rx="18" transform="rotate(32 720 347)" fill="#23272e"/>
-    <circle cx="660" cy="640" r="270" fill="#23272e"/>
-    <ellipse cx="560" cy="470" rx="60" ry="32" transform="rotate(-35 560 470)" fill="#fff" opacity=".22"/>
-    <path d="M880 150 L895 185 L935 185 L903 208 L917 246 L880 222 L843 246 L857 208 L825 185 L865 185 Z" fill="#ffe27a" stroke="#fff6c8" stroke-width="6"/>
-    <!-- keypad panel -->
-    <rect x="600" y="520" width="220" height="200" rx="24" fill="#14181d" stroke="#3a414b" stroke-width="8"/>
-    <circle cx="665" cy="585" r="32" fill="#22c55e"/><circle cx="755" cy="585" r="32" fill="#22c55e"/>
-    <circle cx="665" cy="660" r="32" fill="#22c55e"/><circle cx="755" cy="660" r="32" fill="#22c55e"/>
+<g transform="translate(60 50) scale(0.39)" clip-path="url(#c)"><rect width="1024" height="1024" fill="url(#bg)"/><!-- desk -->
+  <rect x="0" y="660" width="1024" height="364" fill="#7a4512" opacity=".45"/>
+  <rect x="0" y="652" width="1024" height="16" fill="#5e360f" opacity=".6"/>
+  <!-- cable from the computer to the bomb -->
+  <path d="M555 470 C 610 480, 600 640, 650 645 C 650 650, 650 610, 667 585" fill="none" stroke="#14202b" stroke-width="16" stroke-linecap="round"/>
+  <!-- bomb sitting on the desk -->
+  <g id="bomb" transform="translate(-45 0)">
+    <path d="M880 395 C 900 340, 940 345, 965 300" fill="none" stroke="#5a3d1c" stroke-width="18" stroke-linecap="round"/>
+    <rect x="820" y="375" width="80" height="60" rx="12" transform="rotate(32 860 405)" fill="#23272e"/>
+    <circle cx="835" cy="525" r="140" fill="#23272e"/>
+    <ellipse cx="775" cy="455" rx="36" ry="20" transform="rotate(-35 775 455)" fill="#fff" opacity=".22"/>
+    <path d="M970 250 L980 275 L1008 275 L986 291 L996 317 L970 301 L944 317 L954 291 L932 275 L960 275 Z" fill="#ffe27a" stroke="#fff6c8" stroke-width="5"/>
   </g>
-  <!-- guy -->
-  <g id="guy">
-    <!-- body -->
-    <path d="M40 1024 C 40 820, 120 740, 260 730 C 400 740, 470 820, 480 1024 Z" fill="#2f5d8a"/>
-    <path d="M200 735 L260 820 L320 735 Z" fill="#244a6e"/>
-    <!-- arm reaching to keypad -->
-    <path d="M380 870 C 450 830, 500 800, 545 785" fill="none" stroke="#2f5d8a" stroke-width="80" stroke-linecap="round"/>
-    <circle cx="560" cy="775" r="42" fill="#f1c27d"/>
-    <path d="M580 750 L625 718" stroke="#f1c27d" stroke-width="30" stroke-linecap="round"/>
-    <!-- neck + head -->
-    <rect x="225" y="640" width="70" height="100" rx="20" fill="#e0ac69"/>
-    <circle cx="260" cy="540" r="150" fill="#f1c27d"/>
-    <!-- helmet -->
-    <path d="M100 540 A160 160 0 0 1 420 540 L420 500 L100 500 Z" fill="#3e5c3a"/>
-    <path d="M105 525 A158 158 0 0 1 415 525" fill="none" stroke="#2d4429" stroke-width="16"/>
-    <rect x="95" y="500" width="335" height="38" rx="19" fill="#2d4429"/>
-    <!-- face: looking right, focused -->
-    <circle cx="300" cy="590" r="17" fill="#14202b"/><circle cx="375" cy="590" r="17" fill="#14202b"/>
-    <path d="M275 560 L325 568" stroke="#14202b" stroke-width="12" stroke-linecap="round"/>
-    <path d="M355 568 L398 560" stroke="#14202b" stroke-width="12" stroke-linecap="round"/>
-    <path d="M325 660 Q 350 650 372 660" fill="none" stroke="#14202b" stroke-width="10" stroke-linecap="round"/>
-    <!-- sweat drop -->
-    <path d="M205 560 C 190 590, 190 610, 205 615 C 220 610, 220 590, 205 560 Z" fill="#8fd3ff"/>
+  <!-- computer -->
+  <g id="pc">
+    <rect x="300" y="540" width="70" height="100" fill="#2a2f37"/>
+    <rect x="225" y="628" width="220" height="30" rx="10" fill="#2a2f37"/>
+    <rect x="110" y="140" width="450" height="410" rx="28" fill="#2a2f37"/>
+    <rect x="140" y="170" width="390" height="350" rx="12" fill="url(#glow)"/>
+    <circle cx="275" cy="285" r="54" fill="#22c55e"/><circle cx="395" cy="285" r="54" fill="#22c55e"/>
+    <circle cx="275" cy="405" r="54" fill="#22c55e"/><circle cx="395" cy="405" r="54" fill="#22c55e"/>
+  </g>
+  <!-- the player, seen from behind -->
+  <g id="person" fill="#14202b">
+    <path d="M40 1024 C 40 920, 110 875, 230 862 C 270 858, 290 845, 300 820 L 380 820 C 390 845, 410 858, 450 862 C 570 875, 640 920, 640 1024 Z"/>
+    <ellipse cx="340" cy="740" rx="98" ry="110"/>
   </g>
 </g>
 <text x="500" y="225" fill="#e3e8ed" font-family="Chakra Petch" font-weight="700" font-size="84">CRACK THE</text>
