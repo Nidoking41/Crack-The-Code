@@ -1,43 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
-<defs>
-    <radialGradient id="bg" cx="50%" cy="35%" r="75%">
-      <stop offset="0" stop-color="#f2a33a"/><stop offset="1" stop-color="#a8641a"/>
-    </radialGradient>
-    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
-      <stop offset="0" stop-color="#1f4630"/><stop offset="1" stop-color="#0d1712"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#f2a33a"/>
+      <stop offset="1" stop-color="#a8641a"/>
     </radialGradient>
   </defs>
-<rect x="0" y="571" width="1024" height="453" fill="#7a4512" opacity=".45"/>
-<g transform="translate(215 200) scale(0.58)"><!-- desk -->
   
-  <rect x="0" y="632" width="1024" height="16" fill="#5e360f" opacity=".6"/>
-  <!-- cable from the computer to the bomb -->
-  <path d="M752 430 C 800 440, 790 615, 830 618 C 810 640, 840 650, 860 625" fill="none" stroke="#14202b" stroke-width="14" stroke-linecap="round"/>
-  <!-- bomb sitting on the desk -->
-  <g id="bomb" transform="translate(-28 0)">
-    <path d="M935 470 C 950 430, 975 430, 985 395" fill="none" stroke="#5a3d1c" stroke-width="14" stroke-linecap="round"/>
-    <rect x="895" y="455" width="56" height="42" rx="9" transform="rotate(32 923 476)" fill="#23272e"/>
-    <circle cx="915" cy="548" r="95" fill="#23272e"/>
-    <ellipse cx="875" cy="500" rx="24" ry="13" transform="rotate(-35 875 500)" fill="#fff" opacity=".22"/>
-    <path d="M988 355 L996 375 L1018 375 L1000 388 L1008 409 L988 396 L968 409 L976 388 L958 375 L980 375 Z" fill="#ffe27a" stroke="#fff6c8" stroke-width="4"/>
+  <g transform="translate(262 282) scale(4.6)">
+    <path d="M60 26 C 66 14, 76 16, 84 10" fill="none" stroke="#5a3d1c" stroke-width="5" stroke-linecap="round"/>
+    <rect x="48" y="20" width="20" height="14" rx="3" transform="rotate(32 58 27)" fill="#23272e"/>
+    <circle cx="44" cy="60" r="33" fill="#23272e"/>
+    <ellipse cx="28" cy="43" rx="8" ry="4.5" transform="rotate(-35 28 43)" fill="#fff" opacity=".28"/>
+    <path d="M86 0 L89 6 L96 6 L90 10 L93 17 L86 12 L79 17 L82 10 L76 6 L83 6 Z" fill="#ffe27a" stroke="#fff6c8" stroke-width="1"/>
+    <g transform="translate(44 60)">
+      <circle cx="-8" cy="-7" r="5.2" fill="#22c55e"/>
+      <circle cx="8" cy="-7" r="5.2" fill="#22c55e"/>
+      <circle cx="-8" cy="7" r="5.2" fill="#22c55e"/>
+      <circle cx="8" cy="7" r="5.2" fill="#22c55e"/>
+    </g>
   </g>
-  <!-- computer, centered -->
-  <g id="pc">
-    <rect x="477" y="520" width="70" height="100" fill="#2a2f37"/>
-    <rect x="402" y="608" width="220" height="28" rx="10" fill="#2a2f37"/>
-    <rect x="262" y="140" width="500" height="390" rx="28" fill="#2a2f37"/>
-    <rect x="292" y="170" width="440" height="330" rx="12" fill="url(#glow)"/>
-    <circle cx="452" cy="275" r="52" fill="#22c55e"/><circle cx="572" cy="275" r="52" fill="#22c55e"/>
-    <circle cx="452" cy="395" r="52" fill="#22c55e"/><circle cx="572" cy="395" r="52" fill="#22c55e"/>
-    <!-- keyboard -->
-    <path d="M345 665 L700 665 L720 750 L325 750 Z" fill="#2a2f37"/>
-    <rect x="352" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="380" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="408" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="436" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="464" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="492" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="520" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="548" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="576" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="604" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="632" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="660" y="678" width="22" height="11" rx="3" fill="#3a414b"/><rect x="358" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="386" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="414" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="442" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="470" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="498" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="526" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="554" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="582" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="610" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="638" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="666" y="694" width="22" height="11" rx="3" fill="#3a414b"/><rect x="364" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="392" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="420" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="448" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="476" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="504" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="532" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="560" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="588" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="616" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="644" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="672" y="710" width="22" height="11" rx="3" fill="#3a414b"/><rect x="430" y="726" width="170" height="11" rx="3" fill="#3a414b"/>
-  </g>
-  <!-- the player, seen from behind, cut off at the left edge -->
-  <g id="person" fill="#14202b">
-    <path d="M-200 1024 C -200 900, -60 850, 80 838 C 110 834, 115 815, 112 790 L 208 790 C 205 818, 222 840, 300 852 C 470 880, 600 950, 610 1024 Z"/>
-    <ellipse cx="160" cy="680" rx="125" ry="140"/>
-  </g>
-</g>
-<rect x="0" y="792" width="569" height="232" fill="#14202b"/>
 </svg>
