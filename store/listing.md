@@ -26,7 +26,7 @@ code,breaker,codebreaker,logic,puzzle,number,guess,brain,deduction,bomb,timer,di
 
 **Age rating:** answer "None" to every question. The game has a cartoon bomb but no violence against people, so it should come out as 4+.
 
-**App Privacy ("nutrition label"):** choose "Data Not Collected".
+**App Privacy ("nutrition label"):** choose "Data Not Collected". The leaderboards use Game Center, and Apple says you don't need to list data that Apple itself collects.
 
 ## Google only
 
@@ -35,7 +35,10 @@ Crack the secret number code before the bomb goes off. A quick logic puzzle.
 
 **Content rating questionnaire:** category "Game", answer No to violence, fear, gambling, user interaction and so on. It should come out as Everyone / PEGI 3.
 
-**Data safety form:** "Does your app collect or share any of the required user data types?" → No.
+**Data safety form:** once the leaderboards are in the app, the answer changes to **Yes**, because Google Play Games gets each player's ID and scores. Declare:
+- **Personal info → User IDs:** collected, not shared, for App functionality, optional (only if the player signs in to Play Games).
+- **App activity → Other actions** (game scores): collected, not shared, for App functionality, optional.
+- Data is encrypted in transit: Yes. Users can ask for deletion: Yes (through their Play Games profile).
 
 **Ads:** No. **Target audience:** 13 and over is the simplest choice. (Picking under 13 brings extra Families policy rules.)
 

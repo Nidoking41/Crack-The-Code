@@ -140,6 +140,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .menu-btn.lvl-medium { --lvl: #e8b800; }
 .menu-btn.lvl-hard { --lvl: #f2891a; }
 .menu-btn.lvl-expert { --lvl: #e0352b; }
+.menu-btn.lvl-mode { align-items: center; text-align: center; }
+.boards-note { text-align: center; min-height: 1em; }
+.boards-note:empty { display: none; }
 .link-btn { align-self: center; background: none; border: 0; color: var(--muted); font: 600 .85rem var(--font-body); text-decoration: underline; cursor: pointer; padding: 6px; }
 
 /* ---------- game screen ---------- */
@@ -371,6 +374,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <button class="menu-btn" type="button" id="go-campaign"><b>Defuse the Bomb</b><small>Beat the clock, level after level</small></button>
     <button class="menu-btn" type="button" id="go-help"><b>How to Play</b><small>Lights, levels and tips</small></button>
     <button class="menu-btn" type="button" id="go-stats"><b>Stats</b><small>Your record for both modes</small></button>
+    <button class="menu-btn" type="button" id="go-boards"><b>Leaderboards</b><small>See who has the longest streak</small></button>
   </nav>
   <button class="link-btn" type="button" id="go-settings">Settings</button>
 </div>
@@ -470,6 +474,25 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       <button class="menu-btn lvl lvl-expert" type="button" data-camp="expert"><b>Expert</b><small>6 digits</small></button>
     </div>
     <button class="secondary" type="button" id="camp-cancel">Back</button>
+  </div>
+</div>
+
+<!-- Leaderboards: pick a mode, then a difficulty, and the phone's own leaderboard opens -->
+<div class="overlay" id="boards" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="boards-title">
+    <div class="sheet-head"><h2 id="boards-title">Leaderboards</h2><span class="sub" id="boards-sub">Pick a mode</span></div>
+    <div class="menu" role="group" aria-label="Leaderboard mode" id="boards-modes">
+      <button class="menu-btn lvl-mode" type="button" data-board-play="quick"><b>Quick Play</b><small>Longest winning streak</small></button>
+      <button class="menu-btn lvl-mode" type="button" data-board-play="bomb"><b>Defuse the Bomb</b><small>Most levels cleared in one run</small></button>
+    </div>
+    <div class="menu" role="group" aria-label="Leaderboard difficulty" id="boards-levels" hidden>
+      <button class="menu-btn lvl lvl-easy" type="button" data-board-lvl="easy"><b>Easy</b><small>3 digits</small></button>
+      <button class="menu-btn lvl lvl-medium" type="button" data-board-lvl="medium"><b>Medium</b><small>4 digits</small></button>
+      <button class="menu-btn lvl lvl-hard" type="button" data-board-lvl="hard"><b>Hard</b><small>5 digits</small></button>
+      <button class="menu-btn lvl lvl-expert" type="button" data-board-lvl="expert"><b>Expert</b><small>6 digits</small></button>
+    </div>
+    <p class="note boards-note" id="boards-note" aria-live="polite"></p>
+    <button class="secondary" type="button" id="boards-back">Back</button>
   </div>
 </div>
 
@@ -740,6 +763,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     if (!won && reason !== "concede") explode();
     if (state.play === "quick") recordQuick(won);
     else if (won) recordCampaignClear();
+    if (won) sendScore(state.play === "quick" ? "quick" : "bomb", state.mode);
     else recordCampaignEnd();
     setMessage("");
     render();
@@ -1005,7 +1029,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   document.querySelectorAll("[data-st-lvl]").forEach((b) => b.addEventListener("click", () => { statsView.lvl = b.dataset.stLvl; renderStats(); }));
 
   // ---------- overlays ----------
-  const OVERLAYS = ["help", "settings", "stats", "quick-setup", "campaign-setup"];
+  const OVERLAYS = ["help", "settings", "stats", "quick-setup", "campaign-setup", "boards"];
   function openOverlay(id, focusId) {
     $(id).hidden = false;
     $(id).querySelector(".sheet").scrollTop = 0;
@@ -1061,6 +1085,88 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     else if (e.key === "Enter") { e.preventDefault(); if (state.over || state.waiting) $("result-main").click(); else submit(); }
   });
   $("mark").addEventListener("click", toggleMarking);
+
+  // ---------- leaderboards (Game Center on iPhone, Google Play Games on Android) ----------
+  // Each board holds one number: the player's best Quick Play streak, or the most
+  // Defuse the Bomb levels cleared in one run. Game Center and Play Games keep each
+  // player's best, so sending the same score again changes nothing.
+  // Board IDs: Game Center IDs are typed into App Store Connect exactly as below.
+  // Play Games makes its own IDs; paste them in after creating the boards in the Play Console.
+  const BOARD_IDS = {
+    ios: {
+      "quick-easy": "crackthecode.quick.easy", "quick-medium": "crackthecode.quick.medium",
+      "quick-hard": "crackthecode.quick.hard", "quick-expert": "crackthecode.quick.expert",
+      "bomb-easy": "crackthecode.bomb.easy", "bomb-medium": "crackthecode.bomb.medium",
+      "bomb-hard": "crackthecode.bomb.hard", "bomb-expert": "crackthecode.bomb.expert",
+    },
+    android: {
+      "quick-easy": "", "quick-medium": "", "quick-hard": "", "quick-expert": "",
+      "bomb-easy": "", "bomb-medium": "", "bomb-hard": "", "bomb-expert": "",
+    },
+  };
+  const cap = window.Capacitor;
+  const platform = cap && cap.isNativePlatform && cap.isNativePlatform() ? cap.getPlatform() : "web";
+  const boardIds = BOARD_IDS[platform] || null;
+  // Leaderboards only work once every board has an ID for this phone.
+  const boardsReady = !!boardIds && Object.values(boardIds).every(Boolean);
+  let signedIn = false;
+  function games(method, options) { return cap.nativePromise("GameServices", method, options || {}); }
+
+  function bestScore(play, lvl) {
+    return play === "quick" ? getStats("lvl-" + lvl, emptyQuick).best : getStats("camp-" + lvl, emptyCamp).bestLevel;
+  }
+  function sendScore(play, lvl) {
+    if (!signedIn) return;
+    const score = bestScore(play, lvl);
+    if (score > 0) games("submitScore", { leaderboardId: boardIds[play + "-" + lvl], score }).catch(() => {});
+  }
+  // Records made before signing in (or on another day) go up the next time the player is signed in.
+  function sendAllScores() {
+    ["quick", "bomb"].forEach((play) => Object.keys(LEVELS).forEach((lvl) => sendScore(play, lvl)));
+  }
+  function signIn(silent) {
+    return games("signIn", { silent }).then((r) => {
+      signedIn = !!(r && r.signedIn);
+      if (signedIn) sendAllScores();
+      return signedIn;
+    }).catch(() => false);
+  }
+  if (boardsReady) signIn(true);
+
+  let boardPlay = null;
+  function renderBoards(note) {
+    $("boards-modes").hidden = !!boardPlay;
+    $("boards-levels").hidden = !boardPlay;
+    $("boards-sub").textContent = boardPlay ? (boardPlay === "quick" ? "Quick Play" : "Defuse the Bomb") : "Pick a mode";
+    $("boards-note").textContent = note || "";
+  }
+  const SIGN_IN_HELP = platform === "ios"
+    ? "Sign in to Game Center to see the leaderboards. If nothing pops up, open the iPhone's Settings, tap Game Center, and sign in there."
+    : "Sign in to Google Play Games to see the leaderboards.";
+  async function openBoard(lvl) {
+    if (!boardsReady) {
+      renderBoards(platform === "web" ? "Leaderboards are in the Crack the Code! phone app." : "Leaderboards are coming soon.");
+      return;
+    }
+    if (!signedIn && !(await signIn(false))) { renderBoards(SIGN_IN_HELP); return; }
+    renderBoards("");
+    games("showLeaderboard", { leaderboardId: boardIds[boardPlay + "-" + lvl] })
+      .catch(() => renderBoards("The leaderboard didn't open. Check your internet connection and try again."));
+  }
+  $("go-boards").addEventListener("click", () => {
+    boardPlay = null;
+    renderBoards("");
+    openOverlay("boards", "boards-back");
+  });
+  document.querySelectorAll("[data-board-play]").forEach((b) => b.addEventListener("click", () => {
+    boardPlay = b.dataset.boardPlay;
+    renderBoards("");
+  }));
+  document.querySelectorAll("[data-board-lvl]").forEach((b) => b.addEventListener("click", () => openBoard(b.dataset.boardLvl)));
+  $("boards-back").addEventListener("click", () => {
+    if (boardPlay) { boardPlay = null; renderBoards(""); }
+    else $("boards").hidden = true;
+  });
 
   // ---------- color schemes ----------
   const SCHEMES = [
