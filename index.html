@@ -131,6 +131,13 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .menu-btn.main { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 60%, black); }
 .menu-btn.main small { color: inherit; opacity: .85; }
 .menu-btn:active { transform: translateY(2px); box-shadow: none; }
+/* Level picker buttons: centered text, one color per level */
+.menu-btn.lvl { align-items: center; text-align: center; color: #14202b; border-color: transparent; }
+.menu-btn.lvl small { color: inherit; opacity: .8; }
+.menu-btn.lvl-easy { background: #2fbf5f; box-shadow: 0 2px 0 #1d7a3c; }
+.menu-btn.lvl-medium { background: #f5cc2a; box-shadow: 0 2px 0 #a8870f; }
+.menu-btn.lvl-hard { background: #f2891a; box-shadow: 0 2px 0 #a65a0b; }
+.menu-btn.lvl-expert { background: #e0352b; color: #ffffff; box-shadow: 0 2px 0 #8f1f18; }
 .link-btn { align-self: center; background: none; border: 0; color: var(--muted); font: 600 .85rem var(--font-body); text-decoration: underline; cursor: pointer; padding: 6px; }
 
 /* ---------- game screen ---------- */
@@ -440,10 +447,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="quick-title">
     <div class="sheet-head"><h2 id="quick-title">Quick Play</h2><span class="sub">Pick a level</span></div>
     <div class="menu" role="group" aria-label="Quick Play level">
-      <button class="menu-btn" type="button" data-quick="easy"><b>Easy</b><small>3 digits</small></button>
-      <button class="menu-btn" type="button" data-quick="medium"><b>Medium</b><small>4 digits</small></button>
-      <button class="menu-btn" type="button" data-quick="hard"><b>Hard</b><small>5 digits</small></button>
-      <button class="menu-btn" type="button" data-quick="expert"><b>Expert</b><small>6 digits</small></button>
+      <button class="menu-btn lvl lvl-easy" type="button" data-quick="easy"><b>Easy</b><small>3 digits</small></button>
+      <button class="menu-btn lvl lvl-medium" type="button" data-quick="medium"><b>Medium</b><small>4 digits</small></button>
+      <button class="menu-btn lvl lvl-hard" type="button" data-quick="hard"><b>Hard</b><small>5 digits</small></button>
+      <button class="menu-btn lvl lvl-expert" type="button" data-quick="expert"><b>Expert</b><small>6 digits</small></button>
     </div>
     <button class="secondary" type="button" id="quick-cancel">Back</button>
   </div>
@@ -455,10 +462,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <div class="sheet-head"><h2 id="campaign-title">Defuse the Bomb</h2><span class="sub">Pick a level</span></div>
     <p class="note">Level 1 gives you 5:00. Each level after that has 15 seconds less.</p>
     <div class="menu" role="group" aria-label="Defuse the Bomb level">
-      <button class="menu-btn" type="button" data-camp="easy"><b>Easy</b><small>3 digits</small></button>
-      <button class="menu-btn" type="button" data-camp="medium"><b>Medium</b><small>4 digits</small></button>
-      <button class="menu-btn" type="button" data-camp="hard"><b>Hard</b><small>5 digits</small></button>
-      <button class="menu-btn" type="button" data-camp="expert"><b>Expert</b><small>6 digits</small></button>
+      <button class="menu-btn lvl lvl-easy" type="button" data-camp="easy"><b>Easy</b><small>3 digits</small></button>
+      <button class="menu-btn lvl lvl-medium" type="button" data-camp="medium"><b>Medium</b><small>4 digits</small></button>
+      <button class="menu-btn lvl lvl-hard" type="button" data-camp="hard"><b>Hard</b><small>5 digits</small></button>
+      <button class="menu-btn lvl lvl-expert" type="button" data-camp="expert"><b>Expert</b><small>6 digits</small></button>
     </div>
     <button class="secondary" type="button" id="camp-cancel">Back</button>
   </div>
