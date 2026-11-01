@@ -32,7 +32,7 @@ Codes never repeat a digit. Every level gives you 10 guesses.
 
 The lights form a shape with one light per digit: a triangle on Easy, a square on Medium, a pentagon on Hard and a hexagon on Expert. On the square they fill in reading order; on the other shapes they start at the top and go clockwise.
 
-You pick the level on a screen that opens after you choose Quick Play or Defuse the Bomb, before the game starts.
+After you choose Quick Play or Defuse the Bomb, a screen lists the four levels with their code length. Tap one to start.
 
 ## Quick Play and Defuse the Bomb
 
