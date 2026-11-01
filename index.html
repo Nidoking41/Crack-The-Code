@@ -435,39 +435,31 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   <div class="word">BOOM!</div>
 </div>
 
-<!-- Quick Play setup -->
+<!-- Quick Play setup: tapping a level starts the game -->
 <div class="overlay" id="quick-setup" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="quick-title">
     <div class="sheet-head"><h2 id="quick-title">Quick Play</h2><span class="sub">Pick a level</span></div>
-    <div class="seg" role="group" aria-label="Quick Play difficulty" id="quick-seg">
-      <button type="button" data-quick="easy">Easy</button>
-      <button type="button" data-quick="medium">Medium</button>
-      <button type="button" data-quick="hard">Hard</button>
-      <button type="button" data-quick="expert">Expert</button>
+    <div class="menu" role="group" aria-label="Quick Play level">
+      <button class="menu-btn" type="button" data-quick="easy"><b>Easy</b><small>3 digits</small></button>
+      <button class="menu-btn" type="button" data-quick="medium"><b>Medium</b><small>4 digits</small></button>
+      <button class="menu-btn" type="button" data-quick="hard"><b>Hard</b><small>5 digits</small></button>
+      <button class="menu-btn" type="button" data-quick="expert"><b>Expert</b><small>6 digits</small></button>
     </div>
-    <ul class="setup-list" id="quick-info"></ul>
-    <button class="primary" type="button" id="quick-start">Start</button>
     <button class="secondary" type="button" id="quick-cancel">Back</button>
   </div>
 </div>
 
-<!-- Defuse the Bomb (campaign) setup -->
+<!-- Defuse the Bomb (campaign) setup: tapping a level starts the run -->
 <div class="overlay" id="campaign-setup" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="campaign-title">
     <div class="sheet-head"><h2 id="campaign-title">Defuse the Bomb</h2><span class="sub">Pick a level</span></div>
-    <div class="seg" role="group" aria-label="Defuse the Bomb difficulty" id="camp-seg">
-      <button type="button" data-camp="easy">Easy</button>
-      <button type="button" data-camp="medium">Medium</button>
-      <button type="button" data-camp="hard">Hard</button>
-      <button type="button" data-camp="expert">Expert</button>
+    <p class="note">Level 1 gives you 5:00. Each level after that has 15 seconds less.</p>
+    <div class="menu" role="group" aria-label="Defuse the Bomb level">
+      <button class="menu-btn" type="button" data-camp="easy"><b>Easy</b><small>3 digits</small></button>
+      <button class="menu-btn" type="button" data-camp="medium"><b>Medium</b><small>4 digits</small></button>
+      <button class="menu-btn" type="button" data-camp="hard"><b>Hard</b><small>5 digits</small></button>
+      <button class="menu-btn" type="button" data-camp="expert"><b>Expert</b><small>6 digits</small></button>
     </div>
-    <ul class="setup-list">
-      <li>Level 1 gives you <b>5:00</b> on the clock.</li>
-      <li>Each new level has <b>15 seconds</b> less.</li>
-      <li>You still get ten guesses per bomb.</li>
-      <li>Run out of time or guesses and it's over.</li>
-    </ul>
-    <button class="primary" type="button" id="camp-start">Start</button>
     <button class="secondary" type="button" id="camp-cancel">Back</button>
   </div>
 </div>
@@ -1019,31 +1011,19 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   $("stats-close").addEventListener("click", () => { $("stats").hidden = true; });
 
   // ---------- title menu ----------
-  let quickPick = load("ctc-level", "medium");
-  function renderQuickSeg() {
-    document.querySelectorAll("[data-quick]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.quick === quickPick)));
-    $("quick-info").innerHTML = "<li>Crack a <b>" + LEVELS[quickPick].len + "-digit</b> code.</li>" +
-      "<li>You get <b>ten guesses</b> and no countdown.</li><li>The clock records how fast you defuse it.</li>";
-  }
-  document.querySelectorAll("[data-quick]").forEach((b) => b.addEventListener("click", () => { quickPick = b.dataset.quick; renderQuickSeg(); }));
-  $("go-quick").addEventListener("click", () => { if (!LEVELS[quickPick]) quickPick = "medium"; renderQuickSeg(); openOverlay("quick-setup", "quick-start"); });
-  $("quick-cancel").addEventListener("click", () => { $("quick-setup").hidden = true; });
-  $("quick-start").addEventListener("click", () => {
+  document.querySelectorAll("[data-quick]").forEach((b) => b.addEventListener("click", () => {
     $("quick-setup").hidden = true;
-    newQuick(quickPick);
-  });
-  let campPick = load("ctc-camp-level", "medium");
-  function renderCampSeg() {
-    document.querySelectorAll("[data-camp]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.camp === campPick)));
-  }
-  document.querySelectorAll("[data-camp]").forEach((b) => b.addEventListener("click", () => { campPick = b.dataset.camp; renderCampSeg(); }));
-  $("go-campaign").addEventListener("click", () => { if (!LEVELS[campPick]) campPick = "medium"; renderCampSeg(); openOverlay("campaign-setup", "camp-start"); });
-  $("camp-cancel").addEventListener("click", () => { $("campaign-setup").hidden = true; });
-  $("camp-start").addEventListener("click", () => {
-    save("ctc-camp-level", campPick);
+    newQuick(b.dataset.quick);
+  }));
+  $("go-quick").addEventListener("click", () => openOverlay("quick-setup", "quick-cancel"));
+  $("quick-cancel").addEventListener("click", () => { $("quick-setup").hidden = true; });
+  document.querySelectorAll("[data-camp]").forEach((b) => b.addEventListener("click", () => {
+    save("ctc-camp-level", b.dataset.camp);
     $("campaign-setup").hidden = true;
-    newCampaignLevel(campPick, 1);
-  });
+    newCampaignLevel(b.dataset.camp, 1);
+  }));
+  $("go-campaign").addEventListener("click", () => openOverlay("campaign-setup", "camp-cancel"));
+  $("camp-cancel").addEventListener("click", () => { $("campaign-setup").hidden = true; });
   $("go-help").addEventListener("click", () => openOverlay("help", "help-close"));
   $("game-help").addEventListener("click", () => openOverlay("help", "help-close"));
   $("go-stats").addEventListener("click", () => {
