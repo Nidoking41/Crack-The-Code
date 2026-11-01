@@ -1178,7 +1178,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   // Defuse the Bomb levels cleared in one run. Game Center and Play Games keep each
   // player's best, so sending the same score again changes nothing.
   // Board IDs: Game Center IDs are typed into App Store Connect exactly as below.
-  // Play Games makes its own IDs; paste them in after creating the boards in the Play Console.
+  // Play Games makes its own IDs; these are copied from the Play Console's Leaderboards page.
   const BOARD_IDS = {
     ios: {
       "quick-easy": "crackthecode.quick.easy", "quick-medium": "crackthecode.quick.medium",
@@ -1187,8 +1187,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       "bomb-hard": "crackthecode.bomb.hard", "bomb-expert": "crackthecode.bomb.expert",
     },
     android: {
-      "quick-easy": "", "quick-medium": "", "quick-hard": "", "quick-expert": "",
-      "bomb-easy": "", "bomb-medium": "", "bomb-hard": "", "bomb-expert": "",
+      "quick-easy": "CgkI95Cm54IMEAIQAg", "quick-medium": "CgkI95Cm54IMEAIQAQ",
+      "quick-hard": "CgkI95Cm54IMEAIQAw", "quick-expert": "CgkI95Cm54IMEAIQBA",
+      "bomb-easy": "CgkI95Cm54IMEAIQBQ", "bomb-medium": "CgkI95Cm54IMEAIQBg",
+      "bomb-hard": "CgkI95Cm54IMEAIQBw", "bomb-expert": "CgkI95Cm54IMEAIQCA",
     },
   };
   const cap = window.Capacitor;
