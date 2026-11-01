@@ -19,7 +19,7 @@ Apple needs every app name to be unique. If "Crack the Code!" is already taken, 
 **Subtitle** (30 characters max): Defuse the bomb in time
 
 **Promotional text** (170 max):
-Crack the secret code before the fuse burns down. Ten guesses, four difficulty levels, and a Campaign that gets faster every level.
+Crack the secret code before the fuse burns down. Ten guesses, four difficulty levels, and a Defuse the Bomb mode that gets faster every level.
 
 **Keywords** (100 max, no spaces after commas):
 code,breaker,codebreaker,logic,puzzle,number,guess,brain,deduction,bomb,timer,digits,riddle
@@ -43,7 +43,7 @@ Crack the secret number code before the bomb goes off. A quick logic puzzle.
 
 A bomb is ticking. The only way to stop it is to crack its secret number code.
 
-Crack the Code is a quick logic puzzle in the spirit of the classic code-breaking game. Guess the code, read the lights, and narrow it down:
+Crack the Code! is a quick logic puzzle in the spirit of the classic code-breaking game. Guess the code, read the lights, and narrow it down:
 
 • Green light: right digit in the right spot
 • Orange light: right digit in the wrong spot
@@ -53,7 +53,7 @@ You get ten guesses. The lights never tell you which digit they belong to, so ev
 
 TWO WAYS TO PLAY
 • Quick Play: one bomb, ten guesses, no countdown. Take your time, or race your best defuse time.
-• Campaign: bomb after bomb against the clock. Level 1 gives you five minutes, and every level after that gives you less. How far can you get?
+• Defuse the Bomb: bomb after bomb against the clock. Level 1 gives you five minutes, and every level after that gives you less. How far can you get?
 
 FOUR LEVELS
 Easy (3 digits), Medium (4), Hard (5) and Expert (6). Codes never repeat a digit.
@@ -64,7 +64,7 @@ MADE FOR YOUR PHONE
 • Eight color schemes, including dark mode
 • Works offline. No ads, no accounts, no tracking.
 
-Can you defuse it before it goes off?
+Can you crack the code before it goes off?
 
 ## Images
 

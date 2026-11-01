@@ -2,7 +2,7 @@
 
 A casual phone game where you defuse a bomb by cracking its secret number code, similar to Mastermind but with digits.
 
-The game opens on a title screen with **Quick Play**, **Campaign**, **How to Play** and **Stats**.
+The game opens on a title screen with **Quick Play**, **Defuse the Bomb**, **How to Play** and **Stats**.
 
 ## How to play
 
@@ -32,21 +32,21 @@ Codes never repeat a digit. Every level gives you 10 guesses.
 
 The lights form a shape with one light per digit: a triangle on Easy, a square on Medium, a pentagon on Hard and a hexagon on Expert. On the square they fill in reading order; on the other shapes they start at the top and go clockwise.
 
-After your first guess, the other levels are hidden until the game ends, so a stray tap can't quit your game.
+You pick the level on a screen that opens after you choose Quick Play or Defuse the Bomb, before the game starts.
 
-## Quick Play and Campaign
+## Quick Play and Defuse the Bomb
 
 - **Quick Play:** one bomb, 10 guesses, no countdown. The clock records how long you took. The bomb flashes on your last two guesses, harder on the final one.
-- **Campaign:** defuse bomb after bomb at the level you pick. Level 1 gives you 5:00, and each level after that has 15 seconds less (never under 30 seconds, which is reached at level 19). Under one minute the bomb flashes and pulses. Running out of time or guesses ends the campaign.
+- **Defuse the Bomb:** defuse bomb after bomb at the level you pick. Level 1 gives you 5:00, and each level after that has 15 seconds less (never under 30 seconds, which is reached at level 19). Under one minute the bomb flashes and pulses. Running out of time or guesses ends the run.
 - **Explosion:** whenever a bomb goes off, in either mode, the screen flashes and shakes with a BOOM.
 - **Concede:** tap Concede twice to give up and return to the title screen. It counts as a loss.
 
 ## Stats
 
-Stats are split by Quick Play and Campaign, and by level, and saved in your browser:
+Stats are split by Quick Play and Defuse the Bomb, and by level, and saved in your browser:
 
 - Quick Play: games played, win %, current and best streak, bombs defused and exploded, average guesses, fastest and average defuse time, and a guess breakdown.
-- Campaign: highest level cleared, runs, bombs defused, runs ended, average guesses, fastest and average defuse time, and a guess breakdown.
+- Defuse the Bomb: highest level cleared, runs, bombs defused, runs ended, average guesses, fastest and average defuse time, and a guess breakdown.
 
 ## Settings
 
