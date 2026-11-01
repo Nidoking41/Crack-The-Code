@@ -131,13 +131,15 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .menu-btn.main { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 60%, black); }
 .menu-btn.main small { color: inherit; opacity: .85; }
 .menu-btn:active { transform: translateY(2px); box-shadow: none; }
-/* Level picker buttons: centered text, one color per level */
-.menu-btn.lvl { align-items: center; text-align: center; color: #14202b; border-color: transparent; }
-.menu-btn.lvl small { color: inherit; opacity: .8; }
-.menu-btn.lvl-easy { background: #2fbf5f; box-shadow: 0 2px 0 #1d7a3c; }
-.menu-btn.lvl-medium { background: #f5cc2a; box-shadow: 0 2px 0 #a8870f; }
-.menu-btn.lvl-hard { background: #f2891a; box-shadow: 0 2px 0 #a65a0b; }
-.menu-btn.lvl-expert { background: #e0352b; color: #ffffff; box-shadow: 0 2px 0 #8f1f18; }
+/* Level picker buttons: centered text, a soft tint of one color per level */
+.menu-btn.lvl { align-items: center; text-align: center; --lvl: #2fbf5f;
+  background: color-mix(in srgb, var(--lvl) 16%, var(--panel));
+  border-color: color-mix(in srgb, var(--lvl) 55%, var(--panel));
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--lvl) 45%, var(--line)); }
+.menu-btn.lvl-easy { --lvl: #2fbf5f; }
+.menu-btn.lvl-medium { --lvl: #e8b800; }
+.menu-btn.lvl-hard { --lvl: #f2891a; }
+.menu-btn.lvl-expert { --lvl: #e0352b; }
 .link-btn { align-self: center; background: none; border: 0; color: var(--muted); font: 600 .85rem var(--font-body); text-decoration: underline; cursor: pointer; padding: 6px; }
 
 /* ---------- game screen ---------- */
