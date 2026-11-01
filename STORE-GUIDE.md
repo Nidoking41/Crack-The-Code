@@ -110,6 +110,43 @@ Click **Add for Review**, then **Submit**. Review usually takes one to three day
 
 ---
 
+## Part 8: Set up the leaderboards
+
+The game has 8 leaderboards: Quick Play and Defuse the Bomb, each in Easy, Medium, Hard and Expert. Each board ranks players by one number: their longest Quick Play winning streak, or the most Defuse the Bomb levels they cleared in one run. Until every board below exists and Google's IDs are in the game, the Leaderboards button just says "coming soon".
+
+### Google Play Games (Android)
+
+1. In the Play Console, open the app and go to **Grow users → Play Games Services → Setup and management → Configuration**. Choose **No, my game doesn't use Google APIs**, name it "Crack the Code!", and create it.
+2. Under **Credentials**, add an **Android** credential. When it asks for the signing certificate, use the **App signing key certificate** from **Test and release → App integrity** (Google offers to fill it in).
+3. Under **Leaderboards**, add these 8 boards. For each one: score format **Numeric**, no decimal places, ordering **Larger is better**.
+   - Quick Play: Easy, Quick Play: Medium, Quick Play: Hard, Quick Play: Expert
+   - Defuse the Bomb: Easy, Defuse the Bomb: Medium, Defuse the Bomb: Hard, Defuse the Bomb: Expert
+4. Copy the **project ID** (a long number at the top of the Configuration page) and each board's **ID** (starts with `Cgk`). Send them to Claude, who puts them in the game: the project ID goes in `android/app/src/main/res/values/games-ids.xml`, the board IDs in `BOARD_IDS.android` in `index.html`.
+5. Under **Testers**, add your own Google account, then **Review and publish** the Play Games setup.
+
+### Game Center (iPhone)
+
+This needs your Apple developer account to be approved first.
+
+1. In App Store Connect, open the app, then **Services → Game Center** (on older layouts: the app version's **Game Center** switch). Turn it on.
+2. Add 8 **Classic** leaderboards. Use "Integer" for the score format, "High to Low" for the sort order, and set **Leaderboard ID** exactly as shown:
+
+   | Name | Leaderboard ID |
+   | --- | --- |
+   | Quick Play: Easy | `crackthecode.quick.easy` |
+   | Quick Play: Medium | `crackthecode.quick.medium` |
+   | Quick Play: Hard | `crackthecode.quick.hard` |
+   | Quick Play: Expert | `crackthecode.quick.expert` |
+   | Defuse the Bomb: Easy | `crackthecode.bomb.easy` |
+   | Defuse the Bomb: Medium | `crackthecode.bomb.medium` |
+   | Defuse the Bomb: Hard | `crackthecode.bomb.hard` |
+   | Defuse the Bomb: Expert | `crackthecode.bomb.expert` |
+
+3. Each board needs an English name for the store (for example "Quick Play: Easy") and a score suffix such as "wins" or "levels".
+4. On the app version page, add the 8 boards under **Game Center** before you submit.
+
+---
+
 ## Releasing an update later
 
 1. Change the game in `index.html` as usual.

@@ -140,6 +140,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .menu-btn.lvl-medium { --lvl: #e8b800; }
 .menu-btn.lvl-hard { --lvl: #f2891a; }
 .menu-btn.lvl-expert { --lvl: #e0352b; }
+.menu-btn.lvl-mode { align-items: center; text-align: center; }
+.boards-note { text-align: center; min-height: 1em; }
+.boards-note:empty { display: none; }
 .link-btn { align-self: center; background: none; border: 0; color: var(--muted); font: 600 .85rem var(--font-body); text-decoration: underline; cursor: pointer; padding: 6px; }
 
 /* ---------- game screen ---------- */
@@ -221,6 +224,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .result .code { font-family: var(--font-digits); font-size: 1.5rem; letter-spacing: .3em; font-weight: 600; }
 .result p { margin: 0; font-size: .9rem; }
 .result .btns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.board.paused .digits, .board.paused .lights { visibility: hidden; }
+.secondary.giveup { color: var(--danger); }
+.secondary.giveup.armed { background: var(--danger); color: #fff; border-color: var(--danger); }
 .primary {
   font: 700 0.95rem var(--font-body); text-transform: uppercase; letter-spacing: .06em;
   background: var(--accent); color: var(--accent-fg); border: 0; border-radius: 10px;
@@ -371,6 +377,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <button class="menu-btn" type="button" id="go-campaign"><b>Defuse the Bomb</b><small>Beat the clock, level after level</small></button>
     <button class="menu-btn" type="button" id="go-help"><b>How to Play</b><small>Lights, levels and tips</small></button>
     <button class="menu-btn" type="button" id="go-stats"><b>Stats</b><small>Your record for both modes</small></button>
+    <button class="menu-btn" type="button" id="go-boards"><b>Leaderboards</b><small>See who has the longest streak</small></button>
   </nav>
   <button class="link-btn" type="button" id="go-settings">Settings</button>
 </div>
@@ -414,6 +421,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <div class="btns">
       <button class="primary" type="button" id="result-main"></button>
       <button class="secondary" type="button" id="result-menu">Menu</button>
+      <button class="secondary giveup" type="button" id="result-giveup" hidden>Give up</button>
     </div>
   </div>
 
@@ -470,6 +478,25 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       <button class="menu-btn lvl lvl-expert" type="button" data-camp="expert"><b>Expert</b><small>6 digits</small></button>
     </div>
     <button class="secondary" type="button" id="camp-cancel">Back</button>
+  </div>
+</div>
+
+<!-- Leaderboards: pick a mode, then a difficulty, and the phone's own leaderboard opens -->
+<div class="overlay" id="boards" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="boards-title">
+    <div class="sheet-head"><h2 id="boards-title">Leaderboards</h2><span class="sub" id="boards-sub">Pick a mode</span></div>
+    <div class="menu" role="group" aria-label="Leaderboard mode" id="boards-modes">
+      <button class="menu-btn lvl-mode" type="button" data-board-play="quick"><b>Quick Play</b><small>Longest winning streak</small></button>
+      <button class="menu-btn lvl-mode" type="button" data-board-play="bomb"><b>Defuse the Bomb</b><small>Most levels cleared in one run</small></button>
+    </div>
+    <div class="menu" role="group" aria-label="Leaderboard difficulty" id="boards-levels" hidden>
+      <button class="menu-btn lvl lvl-easy" type="button" data-board-lvl="easy"><b>Easy</b><small>3 digits</small></button>
+      <button class="menu-btn lvl lvl-medium" type="button" data-board-lvl="medium"><b>Medium</b><small>4 digits</small></button>
+      <button class="menu-btn lvl lvl-hard" type="button" data-board-lvl="hard"><b>Hard</b><small>5 digits</small></button>
+      <button class="menu-btn lvl lvl-expert" type="button" data-board-lvl="expert"><b>Expert</b><small>6 digits</small></button>
+    </div>
+    <p class="note boards-note" id="boards-note" aria-live="polite"></p>
+    <button class="secondary" type="button" id="boards-back">Back</button>
   </div>
 </div>
 
@@ -652,7 +679,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   // ---------- timer ----------
   function elapsedMs() {
     if (!state || !state.startedAt) return 0;
-    return (state.endedAt || Date.now()) - state.startedAt;
+    return (state.endedAt || state.pausedAt || Date.now()) - state.startedAt;
   }
   function remainingMs() { return Math.max(0, state.limitMs - elapsedMs()); }
   function formatTime(ms) {
@@ -668,7 +695,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     if (state.play === "campaign") {
       const left = state.waiting ? state.limitMs : remainingMs();
       $("timer").textContent = formatTime(Math.ceil(left / 1000) * 1000);
-      const ticking = !state.waiting && !state.over;
+      const ticking = !state.waiting && !state.over && !state.pausedAt;
       danger = ticking && left < 60000;
       critical = ticking && left < 10000;
     } else {
@@ -684,7 +711,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     wrap.classList.toggle("critical", critical);
   }
   setInterval(() => {
-    if (!state || state.over || !state.startedAt) return;
+    if (!state || state.over || !state.startedAt || state.pausedAt) return;
     if (state.play === "campaign" && remainingMs() <= 0) { endGame(false, "time"); return; }
     renderTimer();
   }, 200);
@@ -701,7 +728,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       over: false, won: false, reason: "",
       startedAt: null, endedAt: null,
       crossed: [], marking: false,
-      waiting: false, level: 0, limitMs: 0,
+      waiting: false, level: 0, limitMs: 0, pausedAt: null,
     }, extra || {});
   }
 
@@ -728,6 +755,51 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     render();
   }
 
+  // ---------- Defuse the Bomb: pause, leave and come back ----------
+  // Each difficulty keeps its run on the device until a bomb goes off or the player gives up,
+  // so players can leave between levels (or pause mid-level) and pick the run up later.
+  function savedRuns() { return load("ctc-runs", {}); }
+  function saveRun() {
+    if (!state || state.play !== "campaign") return;
+    const runs = savedRuns();
+    if (state.over && !state.won) delete runs[state.mode];
+    else runs[state.mode] = Object.assign({}, state, { savedAt: Date.now() });
+    save("ctc-runs", runs);
+  }
+  function dropRun(mode) {
+    const runs = savedRuns();
+    delete runs[mode];
+    save("ctc-runs", runs);
+  }
+  function ticking() { return !!state && state.play === "campaign" && !!state.startedAt && !state.over && !state.waiting && !state.pausedAt; }
+  function pause() {
+    if (!ticking()) return;
+    state.pausedAt = Date.now();
+    state.marking = false;
+    setMessage("");
+    render();
+  }
+  function resume() {
+    if (!state.pausedAt) return;
+    state.startedAt += Date.now() - state.pausedAt;
+    state.pausedAt = null;
+    render();
+  }
+  function continueRun(mode) {
+    const run = savedRuns()[mode];
+    if (!run || !run.code || run.len !== LEVELS[mode].len) return false;
+    state = run;
+    // The app was closed mid-level without pausing: the clock stopped when it was last saved.
+    if (state.startedAt && !state.over && !state.waiting && !state.pausedAt) state.pausedAt = state.savedAt || Date.now();
+    delete state.savedAt;
+    showScreen("game");
+    setMessage("");
+    render();
+    return true;
+  }
+  // Leaving the app mid-level pauses the clock.
+  document.addEventListener("visibilitychange", () => { if (document.hidden) pause(); });
+
   function inProgress() { return !!state && !state.over && (state.guesses.length > 0 || !!state.startedAt); }
   // A campaign run is live from the first level until a bomb goes off.
   function runLive() { return !!state && state.play === "campaign" && (!state.over || state.won); }
@@ -741,6 +813,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     if (state.play === "quick") recordQuick(won);
     else if (won) recordCampaignClear();
     else recordCampaignEnd();
+    if (won) sendScore(state.play === "quick" ? "quick" : "bomb", state.mode);
     setMessage("");
     render();
   }
@@ -759,8 +832,8 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   function concede() {
     if (state.play === "campaign") {
-      if (!state.over) endGame(false, "concede");
-      else if (state.won) recordCampaignEnd();   // gave up between bombs
+      if (!state.over) { state.pausedAt = null; endGame(false, "concede"); }
+      else if (state.won) { recordCampaignEnd(); dropRun(state.mode); }   // gave up between bombs
     } else if (inProgress()) {
       endGame(false, "concede");
     }
@@ -836,12 +909,13 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     if (state) renderBack();
   }
   function renderBack() {
-    const conceding = state.play === "campaign" ? runLive() : inProgress();
-    $("back").textContent = conceding ? (backArmed ? "Tap again" : "Concede") : "Menu";
+    if (state.play === "campaign") { $("back").textContent = ticking() ? "Pause" : "Menu"; return; }
+    $("back").textContent = inProgress() ? (backArmed ? "Tap again" : "Concede") : "Menu";
   }
   $("back").addEventListener("click", () => {
-    const conceding = state.play === "campaign" ? runLive() : inProgress();
-    if (!conceding) { showScreen("title"); return; }
+    // Defuse the Bomb: the run is saved, so Menu just leaves. Giving up is on the pause screen.
+    if (state.play === "campaign") { if (ticking()) pause(); else showScreen("title"); return; }
+    if (!inProgress()) { showScreen("title"); return; }
     if (backArmed) { concede(); return; }
     backArmed = true;
     $("back").classList.add("armed");
@@ -866,7 +940,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     let html = "";
     for (let t = 0; t < MAX_TURNS; t++) {
       const g = state.guesses[t];
-      const isActive = !state.over && !state.waiting && t === state.guesses.length;
+      const isActive = !state.over && !state.waiting && !state.pausedAt && t === state.guesses.length;
       let cls = "row", cells = "", label = "";
       for (let i = 0; i < state.len; i++) {
         let d = "", extra = "";
@@ -886,6 +960,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         lampsHTML(g ? g.lights : null, state.len) + "</div>";
     }
     $("board").innerHTML = html;
+    $("board").classList.toggle("paused", !!state.pausedAt);
 
     const left = MAX_TURNS - state.guesses.length;
     $("turns").innerHTML = "<b>" + left + "</b> " + (left === 1 ? "guess" : "guesses") + " left";
@@ -896,7 +971,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     $("level-tag").innerHTML = (state.play === "campaign" ? "Level " + state.level : "Quick Play") +
       " <small>· " + LEVELS[state.mode].label + "</small>";
 
-    const playing = !state.over && !state.waiting;
+    const playing = !state.over && !state.waiting && !state.pausedAt;
     document.querySelectorAll(".key[data-d]").forEach((k) => {
       const d = Number(k.dataset.d);
       k.disabled = !playing || (!state.marking && state.current.includes(d));
@@ -910,22 +985,32 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     $("status-row").hidden = !playing;
 
     renderResult();
+    saveRun();
   }
 
   function renderResult() {
     const res = $("result");
-    res.hidden = !(state.over || state.waiting);
+    res.hidden = !(state.over || state.waiting || state.pausedAt);
     if (res.hidden) return;
     const title = $("result-title"), main = $("result-main");
     title.className = "";
     $("result-code").textContent = "";
     $("result-menu").hidden = false;
+    // Giving up only makes sense while a Defuse the Bomb run is still going.
+    $("result-giveup").hidden = !(state.play === "campaign" && (state.pausedAt || state.waiting || (state.over && state.won)));
+    renderGiveUp();
 
+    if (state.pausedAt) {
+      title.textContent = "Paused";
+      $("result-text").textContent = "Level " + state.level + " · " + formatTime(Math.ceil(remainingMs() / 1000) * 1000) +
+        " left. The board is hidden while paused. Tap Menu to leave and come back to this run later.";
+      main.textContent = "Resume";
+      return;
+    }
     if (state.waiting) {
       title.textContent = "Level " + state.level;
       $("result-text").textContent = formatTime(state.limitMs) + " on the clock and ten guesses. The timer starts when you tap Start.";
       main.textContent = "Start";
-      $("result-menu").hidden = true;
       return;
     }
     $("result-code").textContent = state.code.join("");
@@ -937,7 +1022,6 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         $("result-text").textContent = "Level " + state.level + " cleared in " + n + (n === 1 ? " guess" : " guesses") + " and " + took +
           ". Level " + (state.level + 1) + " has " + formatTime(campaignSeconds(state.level + 1) * 1000) + " on the clock.";
         main.textContent = "Next level";
-        $("result-menu").hidden = true;
       } else {
         const st = getStats("lvl-" + state.mode, emptyQuick);
         $("result-text").textContent = "Defused in " + n + (n === 1 ? " guess" : " guesses") + " and " + took + ". Streak: " + st.streak + "." +
@@ -959,11 +1043,29 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   }
 
   $("result-main").addEventListener("click", () => {
-    if (state.waiting) beginLevel();
+    if (state.pausedAt) resume();
+    else if (state.waiting) beginLevel();
     else if (state.play === "campaign") newCampaignLevel(state.mode, state.won ? state.level + 1 : 1);
     else newQuick(state.mode);
   });
   $("result-menu").addEventListener("click", () => showScreen("title"));
+  // Give up needs two taps, like Concede.
+  let giveUpArmed = false, giveUpTimer = null;
+  function renderGiveUp() {
+    $("result-giveup").textContent = giveUpArmed ? "Tap again" : "Give up";
+    $("result-giveup").classList.toggle("armed", giveUpArmed);
+  }
+  $("result-giveup").addEventListener("click", () => {
+    clearTimeout(giveUpTimer);
+    if (giveUpArmed) {
+      giveUpArmed = false;
+      concede();   // counts as a loss and goes back to the title screen
+      return;
+    }
+    giveUpArmed = true;
+    renderGiveUp();
+    giveUpTimer = setTimeout(() => { giveUpArmed = false; renderGiveUp(); }, 3000);
+  });
 
   // ---------- stats screen ----------
   let statsView = { play: "quick", lvl: "medium" };
@@ -1005,7 +1107,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   document.querySelectorAll("[data-st-lvl]").forEach((b) => b.addEventListener("click", () => { statsView.lvl = b.dataset.stLvl; renderStats(); }));
 
   // ---------- overlays ----------
-  const OVERLAYS = ["help", "settings", "stats", "quick-setup", "campaign-setup"];
+  const OVERLAYS = ["help", "settings", "stats", "quick-setup", "campaign-setup", "boards"];
   function openOverlay(id, focusId) {
     $(id).hidden = false;
     $(id).querySelector(".sheet").scrollTop = 0;
@@ -1029,9 +1131,18 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   document.querySelectorAll("[data-camp]").forEach((b) => b.addEventListener("click", () => {
     save("ctc-camp-level", b.dataset.camp);
     $("campaign-setup").hidden = true;
-    newCampaignLevel(b.dataset.camp, 1);
+    if (!continueRun(b.dataset.camp)) newCampaignLevel(b.dataset.camp, 1);
   }));
-  $("go-campaign").addEventListener("click", () => openOverlay("campaign-setup", "camp-cancel"));
+  // A difficulty with a run in progress says which level it's on; tapping it carries on.
+  function renderCampaignSetup() {
+    const runs = savedRuns();
+    document.querySelectorAll("[data-camp]").forEach((b) => {
+      const run = runs[b.dataset.camp];
+      const small = b.querySelector("small");
+      small.textContent = run ? "Continue level " + (run.over && run.won ? run.level + 1 : run.level) : LEVELS[b.dataset.camp].len + " digits";
+    });
+  }
+  $("go-campaign").addEventListener("click", () => { renderCampaignSetup(); openOverlay("campaign-setup", "camp-cancel"); });
   $("camp-cancel").addEventListener("click", () => { $("campaign-setup").hidden = true; });
   $("go-help").addEventListener("click", () => openOverlay("help", "help-close"));
   $("game-help").addEventListener("click", () => openOverlay("help", "help-close"));
@@ -1061,6 +1172,88 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     else if (e.key === "Enter") { e.preventDefault(); if (state.over || state.waiting) $("result-main").click(); else submit(); }
   });
   $("mark").addEventListener("click", toggleMarking);
+
+  // ---------- leaderboards (Game Center on iPhone, Google Play Games on Android) ----------
+  // Each board holds one number: the player's best Quick Play streak, or the most
+  // Defuse the Bomb levels cleared in one run. Game Center and Play Games keep each
+  // player's best, so sending the same score again changes nothing.
+  // Board IDs: Game Center IDs are typed into App Store Connect exactly as below.
+  // Play Games makes its own IDs; paste them in after creating the boards in the Play Console.
+  const BOARD_IDS = {
+    ios: {
+      "quick-easy": "crackthecode.quick.easy", "quick-medium": "crackthecode.quick.medium",
+      "quick-hard": "crackthecode.quick.hard", "quick-expert": "crackthecode.quick.expert",
+      "bomb-easy": "crackthecode.bomb.easy", "bomb-medium": "crackthecode.bomb.medium",
+      "bomb-hard": "crackthecode.bomb.hard", "bomb-expert": "crackthecode.bomb.expert",
+    },
+    android: {
+      "quick-easy": "", "quick-medium": "", "quick-hard": "", "quick-expert": "",
+      "bomb-easy": "", "bomb-medium": "", "bomb-hard": "", "bomb-expert": "",
+    },
+  };
+  const cap = window.Capacitor;
+  const platform = cap && cap.isNativePlatform && cap.isNativePlatform() ? cap.getPlatform() : "web";
+  const boardIds = BOARD_IDS[platform] || null;
+  // Leaderboards only work once every board has an ID for this phone.
+  const boardsReady = !!boardIds && Object.values(boardIds).every(Boolean);
+  let signedIn = false;
+  function games(method, options) { return cap.nativePromise("GameServices", method, options || {}); }
+
+  function bestScore(play, lvl) {
+    return play === "quick" ? getStats("lvl-" + lvl, emptyQuick).best : getStats("camp-" + lvl, emptyCamp).bestLevel;
+  }
+  function sendScore(play, lvl) {
+    if (!signedIn) return;
+    const score = bestScore(play, lvl);
+    if (score > 0) games("submitScore", { leaderboardId: boardIds[play + "-" + lvl], score }).catch(() => {});
+  }
+  // Records made before signing in (or on another day) go up the next time the player is signed in.
+  function sendAllScores() {
+    ["quick", "bomb"].forEach((play) => Object.keys(LEVELS).forEach((lvl) => sendScore(play, lvl)));
+  }
+  function signIn(silent) {
+    return games("signIn", { silent }).then((r) => {
+      signedIn = !!(r && r.signedIn);
+      if (signedIn) sendAllScores();
+      return signedIn;
+    }).catch(() => false);
+  }
+  if (boardsReady) signIn(true);
+
+  let boardPlay = null;
+  function renderBoards(note) {
+    $("boards-modes").hidden = !!boardPlay;
+    $("boards-levels").hidden = !boardPlay;
+    $("boards-sub").textContent = boardPlay ? (boardPlay === "quick" ? "Quick Play" : "Defuse the Bomb") : "Pick a mode";
+    $("boards-note").textContent = note || "";
+  }
+  const SIGN_IN_HELP = platform === "ios"
+    ? "Sign in to Game Center to see the leaderboards. If nothing pops up, open the iPhone's Settings, tap Game Center, and sign in there."
+    : "Sign in to Google Play Games to see the leaderboards.";
+  async function openBoard(lvl) {
+    if (!boardsReady) {
+      renderBoards(platform === "web" ? "Leaderboards are in the Crack the Code! phone app." : "Leaderboards are coming soon.");
+      return;
+    }
+    if (!signedIn && !(await signIn(false))) { renderBoards(SIGN_IN_HELP); return; }
+    renderBoards("");
+    games("showLeaderboard", { leaderboardId: boardIds[boardPlay + "-" + lvl] })
+      .catch(() => renderBoards("The leaderboard didn't open. Check your internet connection and try again."));
+  }
+  $("go-boards").addEventListener("click", () => {
+    boardPlay = null;
+    renderBoards("");
+    openOverlay("boards", "boards-back");
+  });
+  document.querySelectorAll("[data-board-play]").forEach((b) => b.addEventListener("click", () => {
+    boardPlay = b.dataset.boardPlay;
+    renderBoards("");
+  }));
+  document.querySelectorAll("[data-board-lvl]").forEach((b) => b.addEventListener("click", () => openBoard(b.dataset.boardLvl)));
+  $("boards-back").addEventListener("click", () => {
+    if (boardPlay) { boardPlay = null; renderBoards(""); }
+    else $("boards").hidden = true;
+  });
 
   // ---------- color schemes ----------
   const SCHEMES = [

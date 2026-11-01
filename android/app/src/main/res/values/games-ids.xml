@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Play Games project ID from Play Console > Grow users > Play Games Services > Setup.
+         It is a long number. Replace the zeros before building a release. -->
+    <string name="game_services_project_id" translatable="false">000000000000</string>
+</resources>
