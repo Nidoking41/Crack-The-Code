@@ -396,6 +396,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   <div class="hud">
     <div class="hud-left">
       <button class="icon-btn" type="button" id="back">Menu</button>
+      <button class="icon-btn" type="button" id="pause" hidden>Pause</button>
       <button class="icon-btn round" type="button" id="game-help" aria-label="How to play">?</button>
     </div>
     <div class="clock" id="clock" aria-label="Timer">
@@ -560,7 +561,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <p>Defuse bomb after bomb. Level one gives you five minutes, and each level after that has fifteen seconds less. Under one minute, the bomb starts to flash. If the clock runs out or you use all ten guesses, it goes off and your run ends.</p>
     <h3>Runs</h3>
     <p>A run is your streak in a row: every code you crack adds one, and the run ends when a bomb goes off. The bar above the board shows your streak, your average guesses and your average time for this run.</p>
-    <p>Tap <b>Pause</b> to stop the clock. Tap <b>Menu</b> to leave, and your run is saved. Next time you pick that mode, tap <b>Continue run</b> to carry on, or <b>New run</b> to end it and start over. You get one run for Quick Play and one for Defuse the Bomb.</p>
+    <p>Tap <b>Pause</b> to stop the clock. Tap <b>Menu</b> to leave, and your run is saved with the clock stopped. Next time you pick that mode, tap <b>Continue run</b> to carry on, or <b>New run</b> to end it and start over. You get one run for Quick Play and one for Defuse the Bomb.</p>
     <h3>Give up</h3>
     <p>Pause, then tap <b>Give up</b> twice to end your run and go back to the title screen. It counts as a loss.</p>
     <button class="primary" type="button" id="help-close">Got it</button>
@@ -995,9 +996,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   function onTitle() { return !$("title-screen").hidden; }
 
   function disarmBack() { if (state) renderBack(); }
-  function renderBack() { $("back").textContent = ticking() ? "Pause" : "Menu"; }
-  // The run is saved, so Menu just leaves. Giving up is on the pause screen.
-  $("back").addEventListener("click", () => { if (ticking()) pause(); else showScreen("title"); });
+  function renderBack() { $("pause").hidden = !ticking(); }
+  // Menu stops the clock and leaves; the run is saved. Giving up is on the pause screen.
+  $("back").addEventListener("click", () => { pause(); showScreen("title"); });
+  $("pause").addEventListener("click", pause);
 
   // ---------- rendering ----------
   function lampsHTML(lights, n) {
