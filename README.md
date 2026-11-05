@@ -39,7 +39,8 @@ After you choose Quick Play or Defuse the Bomb, a screen lists the four levels w
 - **Quick Play:** one bomb, 10 guesses, no countdown. The clock records how long you took. The bomb flashes on your last two guesses, harder on the final one.
 - **Defuse the Bomb:** defuse bomb after bomb at the level you pick. Level 1 gives you 5:00, and each level after that has 15 seconds less (never under 30 seconds, which is reached at level 19). Under one minute the bomb flashes and pulses. Running out of time or guesses ends the run.
 - **Explosion:** whenever a bomb goes off, in either mode, the screen flashes and shakes with a BOOM.
-- **Concede:** tap Concede twice to give up and return to the title screen. It counts as a loss.
+- **Runs:** a run is your streak in a row. While a run is going, the bar above the board shows your streak, average guesses and average time for that run. Tap Pause to stop the clock, or Menu to leave; the run is saved. Picking that mode again offers **Continue run** or **New run** (which warns "This will end your current run"). There is one run for Quick Play and one for Defuse the Bomb, whatever the difficulty.
+- **Give up:** pause, then tap Give up twice to end the run and return to the title screen. It counts as a loss.
 
 ## Stats
 
