@@ -12,7 +12,7 @@ Apple needs every app name to be unique. If "Crack the Code!" is already taken, 
 
 **Privacy policy URL:** https://nidoking41.github.io/Crack-The-Code/privacy.html
 
-**Price:** Free
+**Price:** $1.99 (US). Let each store set the matching price in other countries.
 
 ## Apple only
 

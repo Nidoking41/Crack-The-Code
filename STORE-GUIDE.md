@@ -68,7 +68,7 @@ The key that proves Android updates come from you is already made. It's in the p
 ### Google
 
 1. In the Play Console click **Create app**.
-2. Name **Crack the Code!**, language English, **Game**, **Free**, tick the declarations, and click **Create app**.
+2. Name **Crack the Code!**, language English, **Game**, **Paid**, tick the declarations, and click **Create app**.
 
 ---
 
@@ -91,7 +91,7 @@ In Codemagic, open the app and click **Start new build**. Pick the `main` branch
 
 All the text and pictures are ready in [`store/listing.md`](store/listing.md) and the `store/` folder. Copy and paste them in.
 
-- **Apple:** in App Store Connect fill in the app's page, App Privacy ("Data Not Collected"), age rating, price (Free) and the iPhone screenshots. Under **Build**, choose the build Codemagic uploaded.
+- **Apple:** in App Store Connect fill in the app's page, App Privacy ("Data Not Collected"), age rating, price ($1.99; Apple needs the Paid Apps agreement signed first, under Business) and the iPhone screenshots. Under **Build**, choose the build Codemagic uploaded.
 - **Google:** fill in **Main store listing**, then everything under **Policy → App content** (privacy policy, ads, content rating, target audience, data safety).
 
 ---
